@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { ArrowLeft, Plus, Check, Play } from 'lucide-react';
+import React, { useState, useMemo, useRef } from 'react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Check, Play } from 'lucide-react';
 import Stars from '../components/Stars.jsx';
 import { CATEGORY_LABEL, VND } from '../data/products.js';
 
@@ -25,11 +25,40 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
   }, [product]);
 
   const [activeImage, setActiveImage] = useState(0);
+  const [direction, setDirection] = useState('next'); // dùng để chọn hiệu ứng trượt trái/phải
   const [justAdded, setJustAdded] = useState(false);
   const discount = product.compareAtPrice
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
     : null;
   const embedUrl = getYouTubeEmbedUrl(product.videoUrl);
+
+  const touchStartX = useRef(null);
+
+  function goTo(idx, dir) {
+    setDirection(dir);
+    setActiveImage(idx);
+  }
+  function goPrev() {
+    goTo((activeImage - 1 + images.length) % images.length, 'prev');
+  }
+  function goNext() {
+    goTo((activeImage + 1) % images.length, 'next');
+  }
+  function selectThumb(i) {
+    goTo(i, i > activeImage ? 'next' : 'prev');
+  }
+
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+  function handleTouchEnd(e) {
+    if (touchStartX.current == null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 40) {
+      if (delta < 0) goNext(); else goPrev();
+    }
+    touchStartX.current = null;
+  }
 
   function handleAdd() {
     addToCart(product.id);
@@ -46,21 +75,45 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
       <div className="dh-detail-grid">
         {/* ---- Gallery ---- */}
         <div className="dh-detail-gallery">
-          <div className="dh-detail-main-image">
-            {images[activeImage] ? (
-              <img src={images[activeImage]} alt={product.name} />
-            ) : (
-              <div className="dh-detail-noimg">Chưa có ảnh</div>
-            )}
+          <div
+            className="dh-detail-main-image"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div key={activeImage} className={`dh-detail-slide dh-detail-slide-${direction}`}>
+              {images[activeImage] ? (
+                <img src={images[activeImage]} alt={product.name} />
+              ) : (
+                <div className="dh-detail-noimg">Chưa có ảnh</div>
+              )}
+            </div>
+
             {discount && <span className="dh-badge-discount dh-detail-badge">-{discount}%</span>}
+
+            {images.length > 1 && (
+              <>
+                <button className="dh-detail-nav dh-detail-nav-prev" onClick={goPrev} aria-label="Ảnh trước">
+                  <ChevronLeft size={20} />
+                </button>
+                <button className="dh-detail-nav dh-detail-nav-next" onClick={goNext} aria-label="Ảnh sau">
+                  <ChevronRight size={20} />
+                </button>
+                <div className="dh-detail-dots">
+                  {images.map((_, i) => (
+                    <span key={i} className={`dh-detail-dot ${activeImage === i ? 'active' : ''}`} />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
+
           {(images.length > 1 || embedUrl) && (
             <div className="dh-detail-thumbs">
               {images.map((img, i) => (
                 <button
                   key={i}
                   className={`dh-detail-thumb ${activeImage === i ? 'active' : ''}`}
-                  onClick={() => setActiveImage(i)}
+                  onClick={() => selectThumb(i)}
                 >
                   {img ? <img src={img} alt={`${product.name} ${i + 1}`} /> : <span>Ảnh</span>}
                 </button>
