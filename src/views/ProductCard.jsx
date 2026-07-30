@@ -10,10 +10,15 @@ export default function ProductCard({ product: p, addToCart, compact }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState(null); // null = not hovering
 
-  function handleAdd() {
+  function handleAdd(e) {
+    e.stopPropagation();
     addToCart(p.id);
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1300);
+  }
+
+  function goToDetail() {
+    window.location.hash = `#/product/${p.id}`;
   }
 
   function handleMove(e) {
@@ -37,6 +42,9 @@ export default function ProductCard({ product: p, addToCart, compact }) {
       onMouseMove={handleMove}
       onMouseEnter={handleMove}
       onMouseLeave={() => setTilt(null)}
+      onClick={goToDetail}
+      role="button"
+      tabIndex={0}
     >
       {discount && <span className="dh-badge-discount">-{discount}%</span>}
       <ProductThumb product={p} />
