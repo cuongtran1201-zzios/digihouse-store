@@ -495,3 +495,29 @@
   transition: transform .2s var(--spring), background .15s ease;
 }
 .dh-scrolltop:hover { transform: translateY(-3px); background: var(--red-dark); }
+
+@media (max-width: 640px) {
+  .dh-catrow {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 16px;
+  }
+  .dh-catrow-item {
+    min-width: calc(33.333% - 8px);
+    flex-shrink: 1;
+  }
+  .dh-flash-scroll {
+    scroll-snap-type: x mandatory;
+    padding-right: 48px;
+  }
+  .dh-flash-scroll .dh-card-compact {
+    scroll-snap-align: start;
+    min-width: 80%;
+    flex-shrink: 0;
+  }
+  .dh-grid {
+    grid-template-columns: 1fr;
+  }
+}
