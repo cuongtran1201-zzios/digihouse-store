@@ -45,3 +45,13 @@ export async function uploadProductImage(file) {
   const { data } = supabase.storage.from('product-images').getPublicUrl(path);
   return data.publicUrl;
 }
+
+/** Upload 1 file video lên bucket `product-videos`, trả về URL công khai */
+export async function uploadProductVideo(file) {
+  const ext = file.name.split('.').pop();
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from('product-videos').upload(path, file);
+  if (error) throw error;
+  const { data } = supabase.storage.from('product-videos').getPublicUrl(path);
+  return data.publicUrl;
+}
