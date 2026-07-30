@@ -3,7 +3,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Check, Play } from 'lucide-
 import Stars from '../components/Stars.jsx';
 import { CATEGORY_LABEL, VND } from '../data/products.js';
 
-function getYouTubeEmbedUrl(url) {
+function getVideoInfo(url) {
   if (!url) return null;
   const patterns = [
     /youtu\.be\/([a-zA-Z0-9_-]+)/,
@@ -13,9 +13,10 @@ function getYouTubeEmbedUrl(url) {
   ];
   for (const re of patterns) {
     const m = url.match(re);
-    if (m) return `https://www.youtube.com/embed/${m[1]}`;
+    if (m) return { type: 'youtube', embedUrl: `https://www.youtube.com/embed/${m[1]}` };
   }
-  return null;
+  // Không phải link YouTube -> coi là file video tải trực tiếp (VD từ Supabase Storage)
+  return { type: 'file', url };
 }
 
 export default function ProductDetailPage({ product, addToCart, onBack }) {
@@ -30,7 +31,7 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
   const discount = product.compareAtPrice
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
     : null;
-  const embedUrl = getYouTubeEmbedUrl(product.videoUrl);
+  const videoInfo = getVideoInfo(product.videoUrl);
 
   const touchStartX = useRef(null);
 
@@ -119,7 +120,7 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
             )}
           </div>
 
-          {(images.length > 1 || embedUrl) && (
+          {(images.length > 1 || videoInfo) && (
             <div className="dh-detail-thumbs">
               {images.map((img, i) => (
                 <button
@@ -130,7 +131,7 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
                   {img ? <img src={img} alt={`${product.name} ${i + 1}`} /> : <span>Ảnh</span>}
                 </button>
               ))}
-              {embedUrl && (
+              {videoInfo && (
                 <a className="dh-detail-thumb dh-detail-thumb-video" href={`#video-${product.id}`}
                   onClick={(e) => { e.preventDefault(); document.getElementById('dh-detail-video')?.scrollIntoView({ behavior: 'smooth' }); }}>
                   <Play size={18} />
@@ -169,16 +170,20 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
       </div>
 
       {/* ---- Video ---- */}
-      {embedUrl && (
+      {videoInfo && (
         <div id="dh-detail-video" className="dh-detail-video-section">
           <h2>Video giới thiệu</h2>
           <div className="dh-detail-video-wrap">
-            <iframe
-              src={embedUrl}
-              title={`Video ${product.name}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            {videoInfo.type === 'youtube' ? (
+              <iframe
+                src={videoInfo.embedUrl}
+                title={`Video ${product.name}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <video src={videoInfo.url} controls playsInline />
+            )}
           </div>
         </div>
       )}
