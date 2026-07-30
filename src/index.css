@@ -22,7 +22,10 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        overflow-x: hidden;
+        width: 100%;
       }
+      html, body { overflow-x: hidden; margin: 0; scroll-behavior: smooth; }
       .dh-app * { box-sizing: border-box; }
       .dh-app button { font-family: inherit; cursor: pointer; }
       .dh-app input, .dh-app select, .dh-app textarea { font-family: inherit; }
@@ -218,7 +221,7 @@
       .dh-flash-scroll .dh-card-compact { min-width: 200px; flex-shrink: 0; }
 
       /* ---- Shop / grid ---- */
-      .dh-shop { max-width: 1280px; margin: 0 auto; width: 100%; padding: 28px 24px 40px; }
+      .dh-shop { max-width: 1280px; margin: 0 auto; width: 100%; padding: 28px 24px 40px; scroll-margin-top: 96px; }
       .dh-shop-head { margin-bottom: 18px; }
       .dh-shop-head h2 { font-size: 20px; font-weight: 800; margin: 0; }
       .dh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
@@ -284,6 +287,19 @@
       .dh-admin-tabs { display: flex; gap: 6px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
       .dh-tab { background: transparent; border: none; color: var(--muted); padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; transition: background .25s var(--spring-soft), color .2s ease; }
       .dh-tab.active { background: var(--red); color: #fff; }
+      .dh-tab-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; margin-left: 6px; background: #E0393B; color: #fff; font-size: 10.5px; font-weight: 700; border-radius: 999px; }
+      .dh-order-customer { display: flex; flex-direction: column; gap: 2px; }
+      .dh-order-email { font-size: 11px; color: var(--muted); }
+      .dh-status-wrap { position: relative; display: inline-block; }
+      .dh-status-badge { display: inline-flex; align-items: center; gap: 4px; border: none; padding: 5px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+      .dh-status-placed { background: #FFF4D6; color: #8A5B00; }
+      .dh-status-shipped { background: #DCEBFF; color: #1B4C87; }
+      .dh-status-completed { background: #DFF5E6; color: #1B7A3D; }
+      .dh-status-cancelled { background: #FBE2E2; color: #B0231C; }
+      .dh-status-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 28px rgba(0,0,0,0.14); padding: 6px; display: flex; flex-direction: column; gap: 2px; z-index: 10; min-width: 120px; animation: dhCardPopIn .18s var(--spring-soft) both; }
+      .dh-status-menu-fixed { position: fixed; top: auto; z-index: 200; }
+      .dh-status-menu button { text-align: left; background: transparent; border: none; padding: 7px 10px; border-radius: 7px; font-size: 12.5px; color: var(--ink); }
+      .dh-status-menu button:hover { background: var(--bg); }
 
       .dh-form { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
       .dh-form-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
@@ -332,17 +348,43 @@
       .dh-login-error { font-size: 12px; color: #C0392B; }
 
       /* ---- Admin login (fully separate screen) ---- */
-      .dh-admin-login { min-height: 100vh; width: 100%; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; }
-      .dh-admin-back { position: absolute; top: 24px; left: 24px; display: flex; align-items: center; gap: 6px; background: transparent; border: none; color: #9AA4B2; font-size: 13px; animation: dhFadeUp .4s ease both; }
-      .dh-admin-back:hover { color: #fff; }
-      .dh-admin-login-card { background: #12161C; border: 1px solid #232830; border-radius: 16px; padding: 36px; width: 400px; max-width: 90vw; text-align: center; animation: dhModalIn .45s var(--spring) both; }
-      .dh-admin-login-badge { width: 52px; height: 52px; border-radius: 14px; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; animation: dhCoinFlip .55s .12s var(--spring) both; }
-      .dh-admin-login-card h2 { color: #fff; font-size: 20px; font-weight: 700; margin: 0 0 8px; }
-      .dh-admin-login-card p { color: #8A93A1; font-size: 12.5px; line-height: 1.5; margin: 0 0 22px; }
+      .dh-admin-login {
+        position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; z-index: 50;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(43,169,225,0.14), transparent 55%),
+          radial-gradient(circle at 85% 80%, rgba(182,146,255,0.10), transparent 50%),
+          linear-gradient(160deg, #05070A 0%, #0B0D10 55%, #05070A 100%);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 40px 20px;
+      }
+      .dh-admin-back { position: absolute; top: 24px; left: 24px; z-index: 4; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 999px; color: #C7CCD4; font-size: 13px; animation: dhFadeUp .4s ease both; }
+      .dh-admin-back:hover { color: #fff; background: rgba(255,255,255,0.09); }
+      .dh-admin-login-card {
+        position: relative; z-index: 4;
+        background: rgba(18,22,28,0.72); backdrop-filter: blur(14px);
+        border: 1px solid rgba(43,169,225,0.22); border-radius: 20px;
+        padding: 40px 36px; width: 400px; max-width: 90vw; text-align: center;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02) inset;
+        animation: dhCardPopIn .45s var(--spring) both;
+      }
+      @keyframes dhCardPopIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+      .dh-admin-login-card .dh-logo { justify-content: center; margin-bottom: 18px; }
+      .dh-admin-login-card .dh-logo-cam { color: #fff; }
+      .dh-admin-login-badge {
+        width: 50px; height: 50px; border-radius: 50%;
+        background: linear-gradient(135deg, #1B4C87, #2BA9E1); color: #fff;
+        display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+        box-shadow: 0 8px 22px rgba(43,169,225,0.35);
+        animation: dhCoinFlip .55s .12s var(--spring) both;
+      }
+      .dh-admin-login-card h2 { color: #fff; font-size: 21px; font-weight: 700; margin: 0 0 8px; }
+      .dh-admin-login-card p { color: #8A93A1; font-size: 12.5px; line-height: 1.5; margin: 0 0 24px; }
       .dh-admin-login-card .dh-field span { color: #C7CCD4; text-align: left; }
       .dh-admin-login-card .dh-login-form { text-align: left; }
-      .dh-input-icon { display: flex; align-items: center; gap: 8px; background: #1A1F27; border: 1px solid #2A303A; border-radius: 8px; padding: 0 12px; }
+      .dh-input-icon { display: flex; align-items: center; gap: 8px; background: #1A1F27; border: 1px solid #2A303A; border-radius: 8px; padding: 0 12px; transition: border-color .2s ease, box-shadow .2s ease; }
+      .dh-input-icon:focus-within { border-color: #2BA9E1; box-shadow: 0 0 0 3px rgba(43,169,225,0.18); }
       .dh-input-icon svg { color: #6B7280; flex-shrink: 0; }
+      .dh-dotgrid-light { background-image: radial-gradient(circle, rgba(43,169,225,0.35) 1.4px, transparent 1.6px); }
       .dh-input-icon input { background: transparent; border: none; color: #fff; padding: 10px 0; flex: 1; }
       .dh-input-icon input:focus { outline: none; }
       .dh-admin-login-card .dh-login-note { color: #6B7280; }
@@ -426,3 +468,30 @@
         .dh-field-row, .dh-field-row-3 { flex-direction: column; }
         .dh-table th:nth-child(5), .dh-table td:nth-child(5) { display: none; }
       }
+
+      .dh-orb {
+  position: absolute; z-index: 2; border-radius: 50%; pointer-events: none;
+  box-shadow: inset -6px -8px 14px rgba(0,0,0,0.3), inset 4px 5px 10px rgba(255,255,255,0.35), 0 10px 22px rgba(0,0,0,0.3);
+  animation: dhOrbFloat 7s ease-in-out infinite;
+}
+@keyframes dhOrbFloat {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-14px) translateX(6px) rotate(8deg); }
+}
+.dh-dotgrid-light {
+  position: absolute;
+  width: 64px; height: 46px;
+  background-image: radial-gradient(circle, rgba(43,169,225,0.35) 1.4px, transparent 1.6px);
+  background-size: 13px 13px; opacity: 0.55;
+}
+
+.dh-scrolltop {
+  position: fixed; bottom: 28px; right: 28px; z-index: 60;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--red); color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+  animation: dhPopIn .3s var(--spring) both;
+  transition: transform .2s var(--spring), background .15s ease;
+}
+.dh-scrolltop:hover { transform: translateY(-3px); background: var(--red-dark); }

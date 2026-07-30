@@ -87,16 +87,16 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
 
           <div className="dh-field-row dh-field-row-3">
             <label className="dh-field">
-              <span>Cảm biến / phim</span>
-              <input value={sensor} onChange={e => setSensor(e.target.value)} placeholder="Full-frame · 24MP" />
+              <span>Độ phân giải</span>
+              <input value={sensor} onChange={e => setSensor(e.target.value)} placeholder="16.1MP" />
             </label>
             <label className="dh-field">
-              <span>Ngàm / ống kính</span>
-              <input value={mount} onChange={e => setMount(e.target.value)} placeholder="Ngàm RF" />
+              <span>Zoom quang học</span>
+              <input value={mount} onChange={e => setMount(e.target.value)} placeholder="12.5x" />
             </label>
             <label className="dh-field">
-              <span>Dải ISO</span>
-              <input value={iso} onChange={e => setIso(e.target.value)} placeholder="ISO 100–51200" />
+              <span>Tình trạng máy</span>
+              <input value={iso} onChange={e => setIso(e.target.value)} placeholder="98% - còn rất mới" />
             </label>
           </div>
 

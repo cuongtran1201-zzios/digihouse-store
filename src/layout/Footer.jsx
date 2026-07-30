@@ -19,11 +19,11 @@ export default function Footer({ onAdminClick }) {
         </div>
         <div className="dh-footer-col">
           <h4>Hỗ trợ khách hàng</h4>
-          <span>Hotline: 1800.2097</span><span>hotro@digihouse.vn</span>
+          <span>Hotline: deo co hotline</span><span>hotro@digihouse.vn</span>
         </div>
       </div>
       <div className="dh-footer-bottom">
-        © 2026 Digi house. Bản demo giao diện — dữ liệu chỉ lưu tạm trong phiên làm việc.
+        © 2026 Digi house.
         <button className="dh-admin-link" onClick={onAdminClick}>Quản trị viên</button>
       </div>
     </footer>

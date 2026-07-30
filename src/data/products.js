@@ -1,11 +1,11 @@
-export const CATEGORIES = ['Rangefinder', 'Mirrorless', 'DSLR', 'Instant', 'Film'];
+export const CATEGORIES = ['Casio', 'Sony', 'Canon', 'Nikon', 'Lumix'];
 
 export const CATEGORY_LABEL = {
-  Rangefinder: 'Máy đo xa',
-  Mirrorless: 'Không gương lật',
-  DSLR: 'DSLR',
-  Instant: 'Ảnh lấy liền',
-  Film: 'Máy phim',
+  Casio: 'Casio Exilim',
+  Sony: 'Sony Cyber-shot',
+  Canon: 'Canon',
+  Nikon: 'Nikon Coolpix',
+  Lumix: 'Panasonic Lumix',
 };
 
 export const VND = (n) => Number(n || 0).toLocaleString('vi-VN') + '₫';

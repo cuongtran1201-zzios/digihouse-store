@@ -15,13 +15,20 @@ export default function Header({
   onCartClick,
   activeCategory,
   setActiveCategory,
+  searchQuery,
+  setSearchQuery,
 }) {
+  function handleSearchSubmit(e) {
+    e.preventDefault();
+    document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
     <>
       {/* ---------------- Top utility bar ---------------- */}
       <div className="dh-topbar">
         <div className="dh-topbar-inner">
-          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống 24 cửa hàng toàn quốc</span>
+          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống 0 cửa hàng toàn quốc</span>
           <div className="dh-topbar-right">
             <span className="dh-topbar-item"><Truck size={12} /> Miễn phí giao hàng</span>
             <span className="dh-topbar-item"><ShieldCheck size={12} /> Bảo hành chính hãng 12 tháng</span>
@@ -33,16 +40,20 @@ export default function Header({
       <header className="dh-header">
         <div className="dh-header-inner">
           <Logo size="lg" />
-          <div className="dh-searchbar">
-            <input placeholder="Bạn muốn tìm máy ảnh gì hôm nay?" />
-            <button aria-label="Tìm kiếm"><Search size={18} /></button>
-          </div>
+          <form className="dh-searchbar" onSubmit={handleSearchSubmit}>
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Bạn muốn tìm máy ảnh gì hôm nay?"
+            />
+            <button type="submit" aria-label="Tìm kiếm"><Search size={18} /></button>
+          </form>
           <div className="dh-header-actions">
             <div className="dh-hotline">
               <div className="dh-hotline-icon"><Phone size={16} /></div>
               <div>
                 <span className="dh-hotline-label">Tổng đài miễn phí</span>
-                <strong>1800.2097</strong>
+                <strong>Lam deo co gi hotline</strong>
               </div>
             </div>
             {customer ? (
@@ -73,7 +84,10 @@ export default function Header({
             <button
               key={cat}
               className={`dh-catnav-item ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => {
+                setActiveCategory(cat);
+                document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {cat === 'All' ? 'Tất cả' : CATEGORY_LABEL[cat]}
             </button>

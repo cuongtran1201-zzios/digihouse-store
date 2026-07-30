@@ -7,6 +7,7 @@ import CustomerLoginModal from './components/CustomerLoginModal.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 import AdminShell from './components/AdminShell.jsx';
 import Toast from './components/Toast.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import CustomerView from './views/CustomerView.jsx';
 import SellerView from './views/SellerView.jsx';
 
@@ -15,6 +16,7 @@ import { getProfile, signOut, createOrder } from './lib/auth.js';
 import {
   fetchProducts, createProduct, updateProduct, deleteProduct as deleteProductApi,
 } from './lib/productsApi.js';
+import { fetchOrders, updateOrderStatus, subscribeToNewOrders } from './lib/ordersApi.js';
 
 export default function App() {
   const [view, setView] = useState('store'); // 'store' | 'adminLogin' | 'admin'
@@ -29,16 +31,22 @@ export default function App() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [placingOrder, setPlacingOrder] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [adminTab, setAdminTab] = useState('add');
   const [editingId, setEditingId] = useState(null);
   const [toast, setToast] = useState('');
   const [cartPulse, setCartPulse] = useState(0);
+  const [orders, setOrders] = useState([]);
 
   const showToast = (msg) => {
     setToast(msg);
     window.clearTimeout(showToast._t);
     showToast._t = window.setTimeout(() => setToast(''), 2600);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
 
   /* ---------------- Load products from Supabase ---------------- */
   useEffect(() => {
@@ -75,9 +83,18 @@ export default function App() {
   const cartItems = cart.map(c => ({ ...c, product: products.find(p => p.id === c.id) })).filter(c => c.product);
   const cartTotal = cartItems.reduce((s, c) => s + c.product.price * c.qty, 0);
 
-  const filtered = useMemo(() => (
-    activeCategory === 'All' ? products : products.filter(p => p.category === activeCategory)
-  ), [products, activeCategory]);
+  const filtered = useMemo(() => {
+    let list = activeCategory === 'All' ? products : products.filter(p => p.category === activeCategory);
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [products, activeCategory, searchQuery]);
 
   const flashSale = useMemo(() => products.filter(p => p.compareAtPrice), [products]);
 
@@ -119,6 +136,35 @@ export default function App() {
       setPlacingOrder(false);
     }
   }
+
+  /* ---------------- Orders: load + realtime notify while admin is logged in ---------------- */
+  useEffect(() => {
+    if (view !== 'admin') return;
+    let alive = true;
+
+    fetchOrders()
+      .then(rows => { if (alive) setOrders(rows); })
+      .catch(err => showToast('Lỗi tải đơn hàng: ' + err.message));
+
+    const unsubscribe = subscribeToNewOrders((newOrder) => {
+      showToast('🔔 Có đơn hàng mới vừa được đặt!');
+      fetchOrders().then(rows => { if (alive) setOrders(rows); }).catch(() => {});
+    });
+
+    return () => { alive = false; unsubscribe(); };
+  }, [view]);
+
+  async function handleChangeOrderStatus(id, status) {
+    try {
+      await updateOrderStatus(id, status);
+      setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
+      showToast('Đã cập nhật trạng thái đơn hàng.');
+    } catch (err) {
+      showToast('Cập nhật thất bại: ' + err.message);
+    }
+  }
+
+  const pendingOrderCount = orders.filter(o => o.status === 'placed').length;
 
   /* ---------------- Product CRUD (admin) ---------------- */
   async function upsertProduct(data) {
@@ -164,7 +210,7 @@ export default function App() {
   function handleAdminLogin() {
     setView('admin');
     setEditingId(null);
-    setAdminTab('inventory');
+    setAdminTab('orders');
   }
   async function handleAdminLogout() {
     await signOut();
@@ -191,15 +237,20 @@ export default function App() {
             setAdminTab={setAdminTab}
             editingProduct={editingProduct}
             onCancelEdit={() => { setEditingId(null); setAdminTab('inventory'); }}
+            onClearEditing={() => setEditingId(null)}
             onSubmit={upsertProduct}
             onDelete={handleDeleteProduct}
             onEdit={startEdit}
+            orders={orders}
+            onChangeOrderStatus={handleChangeOrderStatus}
+            pendingOrderCount={pendingOrderCount}
           />
         </AdminShell>
         <Toast message={toast} />
-      </div>
-    );
-  }
+      <ScrollToTop />
+    </div>
+  );
+}
 
   /* ------------------------- Customer storefront ------------------------- */
   return (
@@ -213,6 +264,8 @@ export default function App() {
         onCartClick={() => setCartOpen(true)}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
 
       <CustomerView
@@ -243,6 +296,7 @@ export default function App() {
       )}
 
       <Toast message={toast} />
+      <ScrollToTop />
     </div>
   );
 }

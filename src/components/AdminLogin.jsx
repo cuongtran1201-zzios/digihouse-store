@@ -66,8 +66,6 @@ export default function AdminLogin({ onSuccess, onBack }) {
           </button>
         </form>
         <p className="dh-login-note">
-          Chưa có tài khoản admin? Đăng ký như khách hàng ở trang chính, sau đó vào Supabase Dashboard →
-          bảng "profiles" → đổi role thành "admin" cho tài khoản đó.
         </p>
       </div>
     </div>
