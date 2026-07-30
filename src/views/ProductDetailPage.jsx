@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Check, Play } from 'lucide-react';
 import Stars from '../components/Stars.jsx';
 import { CATEGORY_LABEL, VND } from '../data/products.js';
@@ -65,6 +65,18 @@ export default function ProductDetailPage({ product, addToCart, onBack }) {
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1300);
   }
+
+  // ---- Điều hướng bằng phím mũi tên trái/phải trên bàn phím ----
+  useEffect(() => {
+    function onKeyDown(e) {
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return; // đang gõ chữ ở ô khác thì bỏ qua
+      if (e.key === 'ArrowLeft') goPrev();
+      if (e.key === 'ArrowRight') goNext();
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [activeImage, images.length]);
 
   return (
     <section className="dh-detail">
