@@ -23,6 +23,8 @@ export function rowToProduct(row) {
     iso: row.iso,
     description: row.description,
     image: row.image_url,
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
+    videoUrl: row.video_url || null,
     rating: Number(row.rating ?? 5),
     sold: Number(row.sold ?? 0),
   };
@@ -40,6 +42,8 @@ export function productToRow(product) {
     iso: product.iso,
     description: product.description,
     image_url: product.image ?? null,
+    gallery: product.gallery ?? [],
+    video_url: product.videoUrl ?? null,
     rating: product.rating ?? 5,
     sold: product.sold ?? 0,
   };
