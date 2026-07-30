@@ -72,7 +72,12 @@ export default function CustomerView({ products, flashSale, addToCart, loading }
           {!loading && featured.length > 0 && (
             <div className="dh-hero2-cards">
               {featured.map((p, i) => (
-                <div className="dh-mini-card dh-hero-in" key={p.id} style={{ animationDelay: `${340 + i * 90}ms` }}>
+                <div
+                  className="dh-mini-card dh-hero-in"
+                  key={p.id}
+                  style={{ animationDelay: `${340 + i * 90}ms` }}
+                  onClick={() => { window.location.hash = `#/product/${p.id}`; }}
+                >
                   <div className="dh-mini-card-thumb">
                     <ProductThumb product={p} />
                   </div>
@@ -81,7 +86,7 @@ export default function CustomerView({ products, flashSale, addToCart, loading }
                     <h4>{p.name}</h4>
                     <div className="dh-mini-card-row">
                       <span className="dh-mini-card-price">{VND(p.price)}</span>
-                      <button className="dh-mini-card-btn" onClick={() => addToCart(p.id)}>Chọn mua</button>
+                      <button className="dh-mini-card-btn" onClick={(e) => { e.stopPropagation(); addToCart(p.id); }}>Chọn mua</button>
                     </div>
                   </div>
                 </div>
