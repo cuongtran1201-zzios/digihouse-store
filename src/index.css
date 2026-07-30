@@ -539,7 +539,7 @@
   background: #fff; border-radius: 16px; overflow: hidden;
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
   display: flex; flex-direction: column;
-  animation: dhModalIn .3s var(--spring) both;
+  animation: dhCardPopIn .3s var(--spring) both;
 }
 .dh-chat-head {
   background: var(--red); color: #fff; padding: 14px 16px;
