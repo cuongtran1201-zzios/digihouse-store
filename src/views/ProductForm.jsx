@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Upload, ImageOff, Check, Loader2, X, Plus } from 'lucide-react';
+import { Upload, ImageOff, Check, Loader2, X, Plus, Video, VideoOff } from 'lucide-react';
 import { CATEGORIES, CATEGORY_LABEL } from '../data/products.js';
-import { uploadProductImage } from '../lib/productsApi.js';
+import { uploadProductImage, uploadProductVideo } from '../lib/productsApi.js';
 
 export default function ProductForm({ initial, onSubmit, onCancel }) {
   const [name, setName] = useState(initial?.name || '');
@@ -17,10 +17,12 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
   const [videoUrl, setVideoUrl] = useState(initial?.videoUrl || '');
   const [uploading, setUploading] = useState(false);
   const [galleryUploading, setGalleryUploading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
   const galleryRef = useRef(null);
+  const videoRef = useRef(null);
 
   async function handleFile(e) {
     const file = e.target.files?.[0];
@@ -57,13 +59,33 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
     }
   }
 
+  async function handleVideoFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 100 * 1024 * 1024) {
+      setError('Video quá lớn (trên 100MB) — nén nhỏ lại hoặc quay video ngắn hơn nhé.');
+      return;
+    }
+    setVideoUploading(true);
+    setError('');
+    try {
+      const url = await uploadProductVideo(file);
+      setVideoUrl(url);
+    } catch (err) {
+      setError('Tải video lên thất bại: ' + (err.message || 'lỗi không xác định'));
+    } finally {
+      setVideoUploading(false);
+      if (videoRef.current) videoRef.current.value = '';
+    }
+  }
+
   function removeGalleryImage(idx) {
     setGallery(prev => prev.filter((_, i) => i !== idx));
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!name.trim() || !price || uploading || galleryUploading) return;
+    if (!name.trim() || !price || uploading || galleryUploading || videoUploading) return;
     setSubmitting(true);
     setError('');
     try {
@@ -78,7 +100,7 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
         description: description.trim() || 'Chưa có mô tả.',
         image,
         gallery,
-        videoUrl: videoUrl.trim() || null,
+        videoUrl: videoUrl || null,
         rating: initial?.rating ?? 5,
         sold: initial?.sold ?? 0,
       });
@@ -136,14 +158,33 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
               placeholder="Điều gì khiến chiếc máy này đáng mua?" />
           </label>
 
-          <label className="dh-field">
-            <span>Link video (YouTube — không bắt buộc)</span>
-            <input
-              value={videoUrl}
-              onChange={e => setVideoUrl(e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
-            />
-          </label>
+          {/* ---- Video sản phẩm (tải file trực tiếp) ---- */}
+          <div className="dh-field">
+            <span>Video sản phẩm (không bắt buộc — quay máy thật, ảnh mẫu chụp thử...)</span>
+            {videoUrl ? (
+              <div className="dh-video-preview">
+                <video src={videoUrl} controls />
+                <button type="button" className="dh-link-btn" onClick={() => setVideoUrl('')}>
+                  <VideoOff size={13} /> Xoá video
+                </button>
+              </div>
+            ) : (
+              <div className="dh-dropzone dh-video-dropzone" onClick={() => !videoUploading && videoRef.current?.click()}>
+                {videoUploading ? (
+                  <div className="dh-dropzone-empty">
+                    <Loader2 size={22} className="dh-spin" />
+                    <span>Đang tải video lên... (có thể mất một lúc)</span>
+                  </div>
+                ) : (
+                  <div className="dh-dropzone-empty">
+                    <Video size={22} />
+                    <span>Nhấn để tải video lên (tối đa 100MB)</span>
+                  </div>
+                )}
+              </div>
+            )}
+            <input ref={videoRef} type="file" accept="video/*" onChange={handleVideoFile} hidden />
+          </div>
 
           {/* ---- Thư viện ảnh phụ ---- */}
           <div className="dh-field">
@@ -199,7 +240,7 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
 
       <div className="dh-form-actions">
         {onCancel && <button type="button" className="dh-btn-secondary" onClick={onCancel}>Huỷ</button>}
-        <button type="submit" className="dh-btn-primary" disabled={uploading || galleryUploading || submitting}>
+        <button type="submit" className="dh-btn-primary" disabled={uploading || galleryUploading || videoUploading || submitting}>
           {submitting ? 'Đang lưu...' : onCancel ? 'Lưu thay đổi' : 'Thêm vào gian hàng'} <Check size={15} />
         </button>
       </div>
