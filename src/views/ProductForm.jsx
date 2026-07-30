@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, ImageOff, Check, Loader2 } from 'lucide-react';
+import { Upload, ImageOff, Check, Loader2, X, Plus } from 'lucide-react';
 import { CATEGORIES, CATEGORY_LABEL } from '../data/products.js';
 import { uploadProductImage } from '../lib/productsApi.js';
 
@@ -13,10 +13,14 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
   const [iso, setIso] = useState(initial?.iso || '');
   const [description, setDescription] = useState(initial?.description || '');
   const [image, setImage] = useState(initial?.image || null);
+  const [gallery, setGallery] = useState(initial?.gallery || []);
+  const [videoUrl, setVideoUrl] = useState(initial?.videoUrl || '');
   const [uploading, setUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
+  const galleryRef = useRef(null);
 
   async function handleFile(e) {
     const file = e.target.files?.[0];
@@ -33,9 +37,33 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
     }
   }
 
+  async function handleGalleryFiles(e) {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setGalleryUploading(true);
+    setError('');
+    try {
+      const urls = [];
+      for (const file of files) {
+        const url = await uploadProductImage(file);
+        urls.push(url);
+      }
+      setGallery(prev => [...prev, ...urls]);
+    } catch (err) {
+      setError('Tải ảnh phụ thất bại: ' + (err.message || 'lỗi không xác định'));
+    } finally {
+      setGalleryUploading(false);
+      if (galleryRef.current) galleryRef.current.value = '';
+    }
+  }
+
+  function removeGalleryImage(idx) {
+    setGallery(prev => prev.filter((_, i) => i !== idx));
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!name.trim() || !price || uploading) return;
+    if (!name.trim() || !price || uploading || galleryUploading) return;
     setSubmitting(true);
     setError('');
     try {
@@ -49,6 +77,8 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
         iso: iso.trim() || '—',
         description: description.trim() || 'Chưa có mô tả.',
         image,
+        gallery,
+        videoUrl: videoUrl.trim() || null,
         rating: initial?.rating ?? 5,
         sold: initial?.sold ?? 0,
       });
@@ -106,11 +136,43 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
               placeholder="Điều gì khiến chiếc máy này đáng mua?" />
           </label>
 
+          <label className="dh-field">
+            <span>Link video (YouTube — không bắt buộc)</span>
+            <input
+              value={videoUrl}
+              onChange={e => setVideoUrl(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
+            />
+          </label>
+
+          {/* ---- Thư viện ảnh phụ ---- */}
+          <div className="dh-field">
+            <span>Ảnh phụ / thư viện ảnh (không bắt buộc)</span>
+            <div className="dh-gallery-grid">
+              {gallery.map((url, idx) => (
+                <div className="dh-gallery-thumb" key={idx}>
+                  <img src={url} alt={`Ảnh phụ ${idx + 1}`} />
+                  <button type="button" onClick={() => removeGalleryImage(idx)} aria-label="Xoá ảnh">
+                    <X size={13} />
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="dh-gallery-add"
+                onClick={() => !galleryUploading && galleryRef.current?.click()}
+              >
+                {galleryUploading ? <Loader2 size={18} className="dh-spin" /> : <Plus size={18} />}
+              </button>
+            </div>
+            <input ref={galleryRef} type="file" accept="image/*" multiple onChange={handleGalleryFiles} hidden />
+          </div>
+
           {error && <span className="dh-login-error">{error}</span>}
         </div>
 
         <div className="dh-form-side">
-          <span className="dh-field-label">Hình ảnh sản phẩm</span>
+          <span className="dh-field-label">Hình ảnh đại diện</span>
           <div className="dh-dropzone" onClick={() => !uploading && fileRef.current?.click()}>
             {uploading ? (
               <div className="dh-dropzone-empty">
@@ -137,7 +199,7 @@ export default function ProductForm({ initial, onSubmit, onCancel }) {
 
       <div className="dh-form-actions">
         {onCancel && <button type="button" className="dh-btn-secondary" onClick={onCancel}>Huỷ</button>}
-        <button type="submit" className="dh-btn-primary" disabled={uploading || submitting}>
+        <button type="submit" className="dh-btn-primary" disabled={uploading || galleryUploading || submitting}>
           {submitting ? 'Đang lưu...' : onCancel ? 'Lưu thay đổi' : 'Thêm vào gian hàng'} <Check size={15} />
         </button>
       </div>
