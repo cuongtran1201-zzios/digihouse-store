@@ -11,6 +11,7 @@ import ChatWidget from './components/ChatWidget.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import CustomerView from './views/CustomerView.jsx';
 import SellerView from './views/SellerView.jsx';
+import ProductDetailPage from './views/ProductDetailPage.jsx';
 
 import { supabase } from './lib/supabaseClient.js';
 import { getProfile, signOut, createOrder } from './lib/auth.js';
@@ -19,8 +20,22 @@ import {
 } from './lib/productsApi.js';
 import { fetchOrders, updateOrderStatus, subscribeToNewOrders } from './lib/ordersApi.js';
 
+function getProductIdFromHash() {
+  const m = window.location.hash.match(/^#\/product\/(.+)$/);
+  return m ? m[1] : null;
+}
+
 export default function App() {
   const [view, setView] = useState('store'); // 'store' | 'adminLogin' | 'admin'
+  const [productDetailId, setProductDetailId] = useState(() => getProductIdFromHash());
+
+  useEffect(() => {
+    function onHashChange() {
+      setProductDetailId(getProductIdFromHash());
+    }
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
   const [customer, setCustomer] = useState(null); // { id, name } | null
   const [loginOpen, setLoginOpen] = useState(false);
 
@@ -269,12 +284,20 @@ export default function App() {
         setSearchQuery={setSearchQuery}
       />
 
-      <CustomerView
-        products={filtered}
-        flashSale={flashSale}
-        addToCart={addToCart}
-        loading={productsLoading}
-      />
+      {productDetailId && products.find(p => String(p.id) === productDetailId) ? (
+        <ProductDetailPage
+          product={products.find(p => String(p.id) === productDetailId)}
+          addToCart={addToCart}
+          onBack={() => window.history.back()}
+        />
+      ) : (
+        <CustomerView
+          products={filtered}
+          flashSale={flashSale}
+          addToCart={addToCart}
+          loading={productsLoading}
+        />
+      )}
 
       <Footer onAdminClick={() => setView('adminLogin')} />
 
