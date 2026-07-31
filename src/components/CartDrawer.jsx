@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, Package, Minus, Plus, Trash2, ChevronRight } from 'lucide-react';
+import { X, Check, Package, Minus, Plus, Trash2, ChevronRight, Wallet, Landmark } from 'lucide-react';
 import ProductThumb from './ProductThumb.jsx';
 import { VND } from '../data/products.js';
 
@@ -15,10 +15,15 @@ export default function CartDrawer({
   onContinueShopping,
 }) {
   const [removingIds, setRemovingIds] = useState(() => new Set());
+  const [paymentMethod, setPaymentMethod] = useState('cod');
 
   function handleRemove(id) {
     setRemovingIds(prev => new Set(prev).add(id));
     window.setTimeout(() => onRemove(id), 220);
+  }
+
+  function handlePlaceOrder() {
+    onPlaceOrder(paymentMethod);
   }
 
   return (
@@ -37,7 +42,11 @@ export default function CartDrawer({
               <Check size={26} />
             </div>
             <h4>Đặt hàng thành công</h4>
-            <p>Đơn hàng của bạn đã được ghi nhận. Ở bản demo này chưa có email xác nhận thật.</p>
+            <p>
+              {paymentMethod === 'cod'
+                ? 'Đơn hàng đã được ghi nhận. Bạn thanh toán tiền mặt khi nhận hàng.'
+                : 'Đơn hàng đã được ghi nhận. Vui lòng chuyển khoản theo thông tin shop gửi qua hotline/Zalo để đơn được xử lý nhanh nhất.'}
+            </p>
             <button className="dh-btn-secondary" onClick={onContinueShopping}>
               Tiếp tục mua sắm
             </button>
@@ -71,11 +80,38 @@ export default function CartDrawer({
                 </div>
               ))}
             </div>
+
+            <div className="dh-payment-select">
+              <span className="dh-payment-label">Phương thức thanh toán</span>
+              <button
+                type="button"
+                className={`dh-payment-option ${paymentMethod === 'cod' ? 'active' : ''}`}
+                onClick={() => setPaymentMethod('cod')}
+              >
+                <Wallet size={16} />
+                <div>
+                  <span className="dh-payment-title">Thanh toán khi nhận hàng (COD)</span>
+                  <span className="dh-payment-desc">Trả tiền mặt cho shipper</span>
+                </div>
+              </button>
+              <button
+                type="button"
+                className={`dh-payment-option ${paymentMethod === 'transfer' ? 'active' : ''}`}
+                onClick={() => setPaymentMethod('transfer')}
+              >
+                <Landmark size={16} />
+                <div>
+                  <span className="dh-payment-title">Chuyển khoản online</span>
+                  <span className="dh-payment-desc">Shop gửi thông tin qua hotline/Zalo</span>
+                </div>
+              </button>
+            </div>
+
             <div className="dh-drawer-total">
               <span>Tạm tính</span>
               <span>{VND(cartTotal)}</span>
             </div>
-            <button className="dh-btn-primary dh-checkout" onClick={onPlaceOrder} disabled={placing}>
+            <button className="dh-btn-primary dh-checkout" onClick={handlePlaceOrder} disabled={placing}>
               {placing ? <><span className="dh-spin dh-inline-spin" /> Đang đặt hàng...</> : <>Đặt hàng ngay <ChevronRight size={16} /></>}
             </button>
           </>
