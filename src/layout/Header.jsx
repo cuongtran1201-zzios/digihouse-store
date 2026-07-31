@@ -41,7 +41,7 @@ export default function Header({
       {/* ---------------- Top utility bar ---------------- */}
       <div className="dh-topbar">
         <div className="dh-topbar-inner">
-          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống 24 cửa hàng toàn quốc</span>
+          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống đéo có cửa hàng toàn quốc</span>
           <div className="dh-topbar-right">
             <span className="dh-topbar-item"><Truck size={12} /> Miễn phí giao hàng</span>
             <span className="dh-topbar-item"><ShieldCheck size={12} /> Bảo hành chính hãng 12 tháng</span>
@@ -76,7 +76,7 @@ export default function Header({
               <div className="dh-hotline-icon"><Phone size={16} /></div>
               <div>
                 <span className="dh-hotline-label">Tổng đài miễn phí</span>
-                <strong>1800.2097</strong>
+                <strong>000co</strong>
               </div>
             </div>
 
