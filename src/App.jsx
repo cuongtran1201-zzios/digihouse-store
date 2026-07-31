@@ -7,13 +7,13 @@ import CustomerLoginModal from './components/CustomerLoginModal.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 import AdminShell from './components/AdminShell.jsx';
 import Toast from './components/Toast.jsx';
-import ChatWidget from './components/ChatWidget.jsx';
-import CustomCursor from './components/CustomCursor.jsx';
-import ScrollToTop from './components/ScrollToTop.jsx';
 import CustomerView from './views/CustomerView.jsx';
 import SellerView from './views/SellerView.jsx';
 import ProductDetailPage from './views/ProductDetailPage.jsx';
 import MyOrdersPage from './views/MyOrdersPage.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
+import ChatWidget from './components/ChatWidget.jsx';
+import CustomCursor from './components/CustomCursor.jsx';
 
 import { supabase } from './lib/supabaseClient.js';
 import { getProfile, signOut, createOrder } from './lib/auth.js';
@@ -21,7 +21,7 @@ import {
   fetchProducts, createProduct, updateProduct, deleteProduct as deleteProductApi,
 } from './lib/productsApi.js';
 import {
-  fetchOrders, updateOrderStatus, subscribeToNewOrders,
+  fetchOrders, updateOrderStatus, updatePaymentStatus, subscribeToNewOrders,
   fetchMyOrders, subscribeToMyOrderUpdates,
 } from './lib/ordersApi.js';
 
@@ -29,7 +29,6 @@ function getProductIdFromHash() {
   const m = window.location.hash.match(/^#\/product\/(.+)$/);
   return m ? m[1] : null;
 }
-
 function isMyOrdersHash() {
   return window.location.hash === '#/orders';
 }
@@ -49,13 +48,32 @@ export default function App() {
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
   const [customer, setCustomer] = useState(null); // { id, name } | null
   const [loginOpen, setLoginOpen] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dh_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dh_cart', JSON.stringify(cart));
+    } catch {
+      // localStorage đầy hoặc bị chặn — bỏ qua, không làm vỡ web
+    }
+  }, [cart]);
   const [cartOpen, setCartOpen] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [placingOrder, setPlacingOrder] = useState(false);
@@ -72,10 +90,6 @@ export default function App() {
     window.clearTimeout(showToast._t);
     showToast._t = window.setTimeout(() => setToast(''), 2600);
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [view]);
 
   /* ---------------- Load products from Supabase ---------------- */
   useEffect(() => {
@@ -143,7 +157,7 @@ export default function App() {
   }
   function removeFromCart(id) { setCart(prev => prev.filter(c => c.id !== id)); }
 
-  async function placeOrder() {
+  async function placeOrder(paymentMethod = 'cod') {
     if (!customer) {
       setCartOpen(false);
       setLoginOpen(true);
@@ -156,6 +170,7 @@ export default function App() {
         customerId: customer.id,
         items: cartItems.map(({ product, qty }) => ({ id: product.id, name: product.name, price: product.price, qty })),
         total: cartTotal,
+        paymentMethod,
       });
       setOrderPlaced(true);
       setCart([]);
@@ -177,6 +192,7 @@ export default function App() {
 
     const unsubscribe = subscribeToNewOrders((newOrder) => {
       showToast('🔔 Có đơn hàng mới vừa được đặt!');
+      // Tải lại để có kèm tên/email khách hàng (join với bảng profiles)
       fetchOrders().then(rows => { if (alive) setOrders(rows); }).catch(() => {});
     });
 
@@ -193,7 +209,20 @@ export default function App() {
     }
   }
 
+  async function handleTogglePaymentStatus(id, currentStatus) {
+    const next = currentStatus === 'paid' ? 'unpaid' : 'paid';
+    try {
+      await updatePaymentStatus(id, next);
+      setOrders(prev => prev.map(o => o.id === id ? { ...o, payment_status: next } : o));
+      showToast(next === 'paid' ? 'Đã đánh dấu thanh toán.' : 'Đã đánh dấu chưa thanh toán.');
+    } catch (err) {
+      showToast('Cập nhật thất bại: ' + err.message);
+    }
+  }
+
   const pendingOrderCount = orders.filter(o => o.status === 'placed').length;
+
+  /* ---------------- Đơn hàng của khách hàng (trang "Đơn hàng của tôi") ---------------- */
   useEffect(() => {
     if (!showMyOrders || !customer) return;
     let alive = true;
@@ -289,13 +318,14 @@ export default function App() {
             onEdit={startEdit}
             orders={orders}
             onChangeOrderStatus={handleChangeOrderStatus}
+            onTogglePaymentStatus={handleTogglePaymentStatus}
             pendingOrderCount={pendingOrderCount}
           />
         </AdminShell>
         <Toast message={toast} />
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
   /* ------------------------- Customer storefront ------------------------- */
   return (
@@ -357,7 +387,7 @@ export default function App() {
           onContinueShopping={() => { setOrderPlaced(false); setCartOpen(false); }}
         />
       )}
-      
+
       <Toast message={toast} />
       <ScrollToTop />
       <ChatWidget customer={customer} />
