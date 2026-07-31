@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { ShieldCheck, Truck, BadgeCheck } from 'lucide-react';
 
 const ITEMS = [
-  { icon: ShieldCheck, title: 'Hàng chính hãng', desc: 'Kiểm tra kỹ trước khi giao', accent: '#1B4C87' },
-  { icon: Truck, title: 'Giao nhanh 2 giờ', desc: 'Nội thành, đóng gói cẩn thận', accent: '#16A085' },
-  { icon: BadgeCheck, title: 'Bảo hành 12 tháng', desc: 'Đổi trả trong 7 ngày', accent: '#8B5FBF' },
+  { icon: ShieldCheck, title: 'Hàng chính hãng', desc: 'Kiểm tra kỹ trước khi giao', accent: '#2BA9E1' },
+  { icon: Truck, title: 'Giao nhanh 2 giờ', desc: 'Nội thành, đóng gói cẩn thận', accent: '#2DD4A0' },
+  { icon: BadgeCheck, title: 'Bảo hành 12 tháng', desc: 'Đổi trả trong 7 ngày', accent: '#B388FF' },
 ];
 
 export default function WhyChooseUs() {
@@ -50,11 +50,12 @@ export default function WhyChooseUs() {
               key={item.title}
               ref={(el) => (cardRefs.current[i] = el)}
               className="dh-why-card"
-              style={{ background: `${item.accent}14` }}
             >
-              <Icon size={28} color={item.accent} strokeWidth={1.8} />
-              <p className="dh-why-card-title" style={{ color: item.accent }}>{item.title}</p>
-              <p className="dh-why-card-desc" style={{ color: item.accent }}>{item.desc}</p>
+              <div className="dh-why-icon" style={{ background: `${item.accent}26`, color: item.accent }}>
+                <Icon size={24} strokeWidth={1.8} />
+              </div>
+              <p className="dh-why-card-title">{item.title}</p>
+              <p className="dh-why-card-desc">{item.desc}</p>
             </div>
           );
         })}
