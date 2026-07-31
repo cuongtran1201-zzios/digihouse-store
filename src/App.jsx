@@ -292,7 +292,6 @@ export default function App() {
           />
         </AdminShell>
         <Toast message={toast} />
-      <ScrollToTop />
     </div>
   );
 }
@@ -357,7 +356,7 @@ export default function App() {
           onContinueShopping={() => { setOrderPlaced(false); setCartOpen(false); }}
         />
       )}
-
+      
       <Toast message={toast} />
       <ScrollToTop />
       <ChatWidget />
