@@ -52,6 +52,7 @@ export default function Header({
       {/* ---------------- Main header ---------------- */}
       <header className="dh-header">
         <div className="dh-header-inner">
+        <a
           href="#"
             className="dh-logo-link"
             onClick={(e) => {
