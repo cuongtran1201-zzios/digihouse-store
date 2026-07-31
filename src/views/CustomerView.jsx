@@ -8,6 +8,7 @@ import SkeletonCard from '../components/SkeletonCard.jsx';
 import ProductThumb from '../components/ProductThumb.jsx';
 import Orb from '../components/Orb.jsx';
 import ProductCard from './ProductCard.jsx';
+import WhyChooseUs from './WhyChooseUs.jsx';
 import { CATEGORIES, CATEGORY_LABEL, VND } from '../data/products.js';
 
 export default function CustomerView({ products, flashSale, addToCart, loading }) {
@@ -95,6 +96,7 @@ export default function CustomerView({ products, flashSale, addToCart, loading }
           )}
         </div>
       </section>
+      <WhyChooseUs />
 
       {/* Category quick icons */}
       <section className="dh-catrow">
