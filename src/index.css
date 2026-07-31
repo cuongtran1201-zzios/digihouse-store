@@ -332,6 +332,38 @@
 
       /* ---- Account button / admin footer link ---- */
       .dh-account-btn { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--line); color: var(--ink); padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+      .dh-account-wrap { position: relative; }
+.dh-account-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 40;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 6px;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.14); min-width: 190px;
+  animation: dhCardPopIn .18s var(--spring-soft) both;
+}
+.dh-account-menu button {
+  width: 100%; display: flex; align-items: center; gap: 9px; text-align: left;
+  background: transparent; border: none; padding: 10px 12px; border-radius: 8px;
+  font-size: 13.5px; color: var(--ink);
+}
+.dh-account-menu button:hover { background: var(--bg); }
+
+/* ---- Order status timeline (Đơn hàng của tôi) ---- */
+.dh-myorders { max-width: 780px; }
+.dh-myorders-title { font-size: 24px; font-weight: 800; margin: 0 0 22px; }
+.dh-myorders-loading { color: var(--muted); }
+.dh-myorders-list { display: flex; flex-direction: column; gap: 18px; }
+.dh-myorders-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.dh-myorders-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.dh-myorders-items { margin: 16px 0; display: flex; flex-direction: column; gap: 6px; }
+.dh-myorders-item { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); }
+
+.dh-order-timeline { display: flex; align-items: center; }
+.dh-order-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+.dh-order-step-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); transition: background .2s ease; }
+.dh-order-step.done .dh-order-step-dot { background: var(--red); }
+.dh-order-step-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.dh-order-step.done .dh-order-step-label { color: var(--ink); font-weight: 600; }
+.dh-order-step-line { flex: 1; height: 2px; background: var(--line); margin: 0 6px 18px; transition: background .2s ease; }
+.dh-order-step-line.done { background: var(--red); }
       .dh-account-btn:hover { border-color: var(--red); color: var(--red); }
       .dh-admin-link { background: none; border: none; color: #6B7280; font-size: 11px; text-decoration: underline; margin-left: 10px; cursor: pointer; }
       .dh-admin-link:hover { color: #fff; }
