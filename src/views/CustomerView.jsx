@@ -9,6 +9,7 @@ import ProductThumb from '../components/ProductThumb.jsx';
 import Orb from '../components/Orb.jsx';
 import ProductCard from './ProductCard.jsx';
 import WhyChooseUs from './WhyChooseUs.jsx';
+import PromoBanners from './PromoBanners.jsx';
 import { CATEGORIES, CATEGORY_LABEL, VND } from '../data/products.js';
 
 export default function CustomerView({ products, flashSale, addToCart, loading }) {
@@ -153,11 +154,7 @@ export default function CustomerView({ products, flashSale, addToCart, loading }
       </section>
 
       {/* Promo banners */}
-      <section className="dh-promos">
-        <Reveal delay={0}><div className="dh-promo-card dh-promo-red"><BadgePercent size={20} /> <span>Giảm thêm 5% khi thanh toán online</span></div></Reveal>
-        <Reveal delay={80}><div className="dh-promo-card dh-promo-dark"><ShieldCheck size={20} /> <span>Bảo hành chính hãng 12–24 tháng</span></div></Reveal>
-        <Reveal delay={160}><div className="dh-promo-card dh-promo-blue"><Truck size={20} /> <span>Giao nhanh 2 giờ nội thành</span></div></Reveal>
-      </section>
+      <PromoBanners />
     </>
   );
 }
