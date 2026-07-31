@@ -31,10 +31,10 @@ export async function getProfile(userId) {
   return data;
 }
 
-export async function createOrder({ customerId, items, total }) {
+export async function createOrder({ customerId, items, total, paymentMethod = 'cod' }) {
   const { data, error } = await supabase
     .from('orders')
-    .insert({ customer_id: customerId, items, total })
+    .insert({ customer_id: customerId, items, total, payment_method: paymentMethod, payment_status: 'unpaid' })
     .select()
     .single();
   if (error) throw error;
