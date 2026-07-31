@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   MapPin, Truck, ShieldCheck, Search, Phone, User, LogOut,
-  ShoppingCart, Menu, Flame,
+  ShoppingCart, Menu, Flame, Package, ChevronDown,
 } from 'lucide-react';
 import Logo from '../components/Logo.jsx';
 import { CATEGORIES, CATEGORY_LABEL } from '../data/products.js';
@@ -10,6 +10,7 @@ export default function Header({
   customer,
   onLoginClick,
   onLogoutClick,
+  onMyOrdersClick,
   cartCount,
   cartPulse,
   onCartClick,
@@ -18,6 +19,18 @@ export default function Header({
   searchQuery,
   setSearchQuery,
 }) {
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef(null);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    function onClickOutside(e) {
+      if (accountRef.current && !accountRef.current.contains(e.target)) setAccountOpen(false);
+    }
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, [accountOpen]);
+
   function handleSearchSubmit(e) {
     e.preventDefault();
     document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
@@ -28,7 +41,7 @@ export default function Header({
       {/* ---------------- Top utility bar ---------------- */}
       <div className="dh-topbar">
         <div className="dh-topbar-inner">
-          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống 0 cửa hàng toàn quốc</span>
+          <span className="dh-topbar-item"><MapPin size={12} /> Hệ thống 24 cửa hàng toàn quốc</span>
           <div className="dh-topbar-right">
             <span className="dh-topbar-item"><Truck size={12} /> Miễn phí giao hàng</span>
             <span className="dh-topbar-item"><ShieldCheck size={12} /> Bảo hành chính hãng 12 tháng</span>
@@ -53,18 +66,32 @@ export default function Header({
               <div className="dh-hotline-icon"><Phone size={16} /></div>
               <div>
                 <span className="dh-hotline-label">Tổng đài miễn phí</span>
-                <strong>Lam deo co gi hotline</strong>
+                <strong>1800.2097</strong>
               </div>
             </div>
+
             {customer ? (
-              <button className="dh-account-btn" onClick={onLogoutClick}>
-                <User size={16} /> {customer.name} <LogOut size={13} />
-              </button>
+              <div className="dh-account-wrap" ref={accountRef}>
+                <button className="dh-account-btn" onClick={() => setAccountOpen(o => !o)}>
+                  <User size={16} /> {customer.name} <ChevronDown size={13} />
+                </button>
+                {accountOpen && (
+                  <div className="dh-account-menu">
+                    <button onClick={() => { setAccountOpen(false); onMyOrdersClick(); }}>
+                      <Package size={15} /> Đơn hàng của tôi
+                    </button>
+                    <button onClick={() => { setAccountOpen(false); onLogoutClick(); }}>
+                      <LogOut size={15} /> Đăng xuất
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <button className="dh-account-btn" onClick={onLoginClick}>
                 <User size={16} /> Đăng nhập
               </button>
             )}
+
             <button className="dh-cart-btn" onClick={onCartClick}>
               <span key={cartPulse} className="dh-cart-icon-wrap">
                 <ShoppingCart size={20} />
