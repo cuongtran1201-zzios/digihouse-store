@@ -41,7 +41,11 @@ export default function WhyChooseUs() {
 
   return (
     <section className="dh-why">
-      <h2 className="dh-why-title">Vì sao chọn Digi house</h2>
+      <h2 className="dh-why-title">
+        <span className="dh-why-title-pre">Vì sao chọn </span>
+        <span className="dh-why-title-digi">Digi</span>
+        <span className="dh-why-title-house">house</span>
+      </h2>
       <div className="dh-why-grid">
         {ITEMS.map((item, i) => {
           const Icon = item.icon;
