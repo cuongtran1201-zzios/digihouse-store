@@ -204,6 +204,17 @@
       .dh-add-btn-done { animation: dhPopIn .35s var(--spring); }
       .dh-cart-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
 
+      /* ---- Vì sao chọn Digi house (3D scroll storytelling) ---- */
+.dh-why { max-width: 1280px; margin: 0 auto; padding: 40px 24px 8px; perspective: 1000px; }
+.dh-why-title { font-size: 22px; font-weight: 800; text-align: center; margin: 0 0 28px; }
+.dh-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.dh-why-card { border-radius: 16px; padding: 28px 20px; text-align: center; transition: transform .05s linear, opacity .05s linear; will-change: transform, opacity; }
+.dh-why-card-title { font-weight: 700; font-size: 15px; margin: 12px 0 4px; }
+.dh-why-card-desc { font-size: 12.5px; margin: 0; opacity: 0.85; }
+@media (max-width: 760px) {
+  .dh-why-grid { grid-template-columns: 1fr; }
+}
+
       /* ---- Category icon row ---- */
       .dh-catrow { max-width: 1280px; margin: 20px auto 0; padding: 18px 24px; display: flex; gap: 14px; overflow-x: auto; }
       .dh-catrow-item { display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 20px; min-width: 100px; flex-shrink: 0; }
@@ -478,7 +489,7 @@
 
       /* ---- Respect reduced motion ---- */
       @media (prefers-reduced-motion: reduce) {
-        .dh-reveal, .dh-hero-in, .dh-cart-icon-wrap, .dh-flame-flicker, .dh-badge-discount, .dh-cart-badge, .dh-orb, .dh-ring3d, .dh-order-check, .dh-overlay {
+        .dh-reveal, .dh-hero-in, .dh-cart-icon-wrap, .dh-flame-flicker, .dh-badge-discount, .dh-cart-badge, .dh-orb, .dh-ring3d, .dh-order-check, .dh-overlay, .dh-why-card {
           animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important;
         }
         .dh-login-modal, .dh-login-modal.dh-shake, .dh-admin-login-card, .dh-admin-login-card.dh-shake, .dh-admin-login-badge {
