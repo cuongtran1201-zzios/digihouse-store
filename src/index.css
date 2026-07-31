@@ -518,6 +518,21 @@
   background-size: 13px 13px; opacity: 0.55;
 }
 
+/* ---- Custom cursor ---- */
+body.dh-cursor-none, body.dh-cursor-none * { cursor: none !important; }
+.dh-cursor-dot {
+  position: fixed; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red); pointer-events: none; z-index: 9999; will-change: transform;
+}
+.dh-cursor-ring {
+  position: fixed; top: 0; left: 0; width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--red); pointer-events: none; z-index: 9998; will-change: transform;
+  transition: width .2s var(--spring-soft), height .2s var(--spring-soft), background .2s ease;
+}
+.dh-cursor-ring.dh-cursor-hover {
+  width: 56px; height: 56px; background: rgba(27,76,135,0.08);
+}
+
 .dh-scrolltop {
   position: fixed; bottom: 28px; right: 28px; z-index: 60;
   width: 46px; height: 46px; border-radius: 50%;
