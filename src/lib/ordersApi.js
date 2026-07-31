@@ -4,7 +4,7 @@ import { supabase } from './supabaseClient.js';
 export async function fetchOrders() {
   const { data, error } = await supabase
     .from('orders')
-    .select('id, items, total, status, created_at, customer_id, profiles ( full_name, email )')
+    .select('id, items, total, status, payment_method, payment_status, created_at, customer_id, profiles ( full_name, email )')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data;
@@ -15,6 +15,18 @@ export async function updateOrderStatus(id, status) {
   const { data, error } = await supabase
     .from('orders')
     .update({ status })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+/** Admin: đánh dấu đơn đã thanh toán / chưa thanh toán */
+export async function updatePaymentStatus(id, paymentStatus) {
+  const { data, error } = await supabase
+    .from('orders')
+    .update({ payment_status: paymentStatus })
     .eq('id', id)
     .select()
     .single();
@@ -46,7 +58,7 @@ export function subscribeToNewOrders(onNewOrder) {
 export async function fetchMyOrders() {
   const { data, error } = await supabase
     .from('orders')
-    .select('id, items, total, status, created_at')
+    .select('id, items, total, status, payment_method, payment_status, created_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data;
