@@ -8,6 +8,7 @@ import AdminLogin from './components/AdminLogin.jsx';
 import AdminShell from './components/AdminShell.jsx';
 import Toast from './components/Toast.jsx';
 import ChatWidget from './components/ChatWidget.jsx';
+import CustomCursor from './components/CustomCursor.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import CustomerView from './views/CustomerView.jsx';
 import SellerView from './views/SellerView.jsx';
@@ -360,6 +361,7 @@ export default function App() {
       <Toast message={toast} />
       <ScrollToTop />
       <ChatWidget customer={customer} />
+      <CustomCursor />
     </div>
   );
 }
