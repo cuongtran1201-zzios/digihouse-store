@@ -4,8 +4,8 @@ import InventoryTable from './InventoryTable.jsx';
 import OrdersTable from './OrdersTable.jsx';
 
 export default function SellerView({
-  products, adminTab, setAdminTab, editingProduct, onClearEditing, onSubmit, onDelete, onEdit,
-  orders, onChangeOrderStatus, pendingOrderCount,
+  products, adminTab, setAdminTab, editingProduct, onCancelEdit, onClearEditing, onSubmit, onDelete, onEdit,
+  orders, onChangeOrderStatus, onTogglePaymentStatus, pendingOrderCount,
 }) {
   return (
     <section className="dh-admin">
@@ -38,7 +38,7 @@ export default function SellerView({
           onCancel={editingProduct ? onCancelEdit : null}
         />
       ) : adminTab === 'orders' ? (
-        <OrdersTable orders={orders} onChangeStatus={onChangeOrderStatus} />
+        <OrdersTable orders={orders} onChangeStatus={onChangeOrderStatus} onTogglePaymentStatus={onTogglePaymentStatus} />
       ) : (
         <InventoryTable products={products} onDelete={onDelete} onEdit={onEdit} />
       )}
