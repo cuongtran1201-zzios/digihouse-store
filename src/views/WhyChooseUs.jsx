@@ -1,0 +1,64 @@
+import React, { useEffect, useRef } from 'react';
+import { ShieldCheck, Truck, BadgeCheck } from 'lucide-react';
+
+const ITEMS = [
+  { icon: ShieldCheck, title: 'Hàng chính hãng', desc: 'Kiểm tra kỹ trước khi giao', accent: '#1B4C87' },
+  { icon: Truck, title: 'Giao nhanh 2 giờ', desc: 'Nội thành, đóng gói cẩn thận', accent: '#16A085' },
+  { icon: BadgeCheck, title: 'Bảo hành 12 tháng', desc: 'Đổi trả trong 7 ngày', accent: '#8B5FBF' },
+];
+
+export default function WhyChooseUs() {
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    function update() {
+      const vh = window.innerHeight;
+      const center = vh / 2;
+      cardRefs.current.forEach((el) => {
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const cardCenter = r.top + r.height / 2;
+        const dist = (cardCenter - center) / (vh / 2);
+        const clamped = Math.max(-1, Math.min(1, dist));
+        const rotate = clamped * 30;
+        const scale = 1 - Math.abs(clamped) * 0.15;
+        const opacity = 1 - Math.abs(clamped) * 0.5;
+        el.style.transform = `rotateX(${rotate.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+        el.style.opacity = Math.max(0.35, opacity).toFixed(2);
+      });
+    }
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => { update(); ticking = false; });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    update();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <section className="dh-why">
+      <h2 className="dh-why-title">Vì sao chọn Digi house</h2>
+      <div className="dh-why-grid">
+        {ITEMS.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={item.title}
+              ref={(el) => (cardRefs.current[i] = el)}
+              className="dh-why-card"
+              style={{ background: `${item.accent}14` }}
+            >
+              <Icon size={28} color={item.accent} strokeWidth={1.8} />
+              <p className="dh-why-card-title" style={{ color: item.accent }}>{item.title}</p>
+              <p className="dh-why-card-desc" style={{ color: item.accent }}>{item.desc}</p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
