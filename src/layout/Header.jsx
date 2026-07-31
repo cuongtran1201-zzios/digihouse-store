@@ -52,7 +52,16 @@ export default function Header({
       {/* ---------------- Main header ---------------- */}
       <header className="dh-header">
         <div className="dh-header-inner">
-          <Logo size="lg" />
+          href="#"
+            className="dh-logo-link"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.hash = '';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
+            <Logo size="lg" />
+          </a>
           <form className="dh-searchbar" onSubmit={handleSearchSubmit}>
             <input
               value={searchQuery}
