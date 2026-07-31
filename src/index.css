@@ -304,6 +304,24 @@
       .dh-qty { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
       .dh-qty button { background: none; border: none; color: var(--ink); display: flex; }
       .dh-qty span { font-size: 12px; min-width: 14px; text-align: center; }
+      /* ---- Payment method (cart) + payment status badge ---- */
+      .dh-payment-select { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 4px; display: flex; flex-direction: column; gap: 8px; }
+      .dh-payment-label { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+      .dh-payment-option {
+        display: flex; align-items: center; gap: 10px; text-align: left;
+        background: var(--bg); border: 1.5px solid var(--line); border-radius: 10px;
+        padding: 10px 12px; color: var(--muted);
+      }
+      .dh-payment-option.active { border-color: var(--red); background: var(--red-light); color: var(--red); }
+      .dh-payment-title { display: block; font-size: 13px; font-weight: 600; color: var(--ink); }
+      .dh-payment-option.active .dh-payment-title { color: var(--red); }
+      .dh-payment-desc { display: block; font-size: 11px; color: var(--muted); }
+      .dh-payment-cell { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+      .dh-payment-method-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; }
+      .dh-paystatus-badge { display: inline-flex; align-items: center; gap: 4px; border: none; padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer; }
+      .dh-paystatus-paid { background: #DFF5E6; color: #1B7A3D; }
+      .dh-paystatus-unpaid { background: #FBE2E2; color: #B0231C; }
+
       .dh-drawer-total { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--line); margin-top: 10px; font-weight: 700; }
       .dh-drawer-total span:last-child { color: var(--red); }
       .dh-checkout { width: 100%; padding: 13px; }
@@ -673,5 +691,5 @@
         .dh-footer-inner { grid-template-columns: 1fr 1fr; }
         .dh-form-grid { grid-template-columns: 1fr; }
         .dh-field-row, .dh-field-row-3 { flex-direction: column; }
-        .dh-table th:nth-child(5), .dh-table td:nth-child(5) { display: none; }
+        .dh-table th:nth-child(6), .dh-table td:nth-child(6) { display: none; }
       }
