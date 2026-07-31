@@ -12,26 +12,38 @@ import ScrollToTop from './components/ScrollToTop.jsx';
 import CustomerView from './views/CustomerView.jsx';
 import SellerView from './views/SellerView.jsx';
 import ProductDetailPage from './views/ProductDetailPage.jsx';
+import MyOrdersPage from './views/MyOrdersPage.jsx';
 
 import { supabase } from './lib/supabaseClient.js';
 import { getProfile, signOut, createOrder } from './lib/auth.js';
 import {
   fetchProducts, createProduct, updateProduct, deleteProduct as deleteProductApi,
 } from './lib/productsApi.js';
-import { fetchOrders, updateOrderStatus, subscribeToNewOrders } from './lib/ordersApi.js';
+import {
+  fetchOrders, updateOrderStatus, subscribeToNewOrders,
+  fetchMyOrders, subscribeToMyOrderUpdates,
+} from './lib/ordersApi.js';
 
 function getProductIdFromHash() {
   const m = window.location.hash.match(/^#\/product\/(.+)$/);
   return m ? m[1] : null;
 }
 
+function isMyOrdersHash() {
+  return window.location.hash === '#/orders';
+}
+
 export default function App() {
   const [view, setView] = useState('store'); // 'store' | 'adminLogin' | 'admin'
   const [productDetailId, setProductDetailId] = useState(() => getProductIdFromHash());
+  const [showMyOrders, setShowMyOrders] = useState(() => isMyOrdersHash());
+  const [myOrders, setMyOrders] = useState([]);
+  const [myOrdersLoading, setMyOrdersLoading] = useState(false);
 
   useEffect(() => {
     function onHashChange() {
       setProductDetailId(getProductIdFromHash());
+      setShowMyOrders(isMyOrdersHash());
     }
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
@@ -181,6 +193,23 @@ export default function App() {
   }
 
   const pendingOrderCount = orders.filter(o => o.status === 'placed').length;
+  useEffect(() => {
+    if (!showMyOrders || !customer) return;
+    let alive = true;
+    setMyOrdersLoading(true);
+
+    fetchMyOrders()
+      .then(rows => { if (alive) setMyOrders(rows); })
+      .catch(err => showToast('Lỗi tải đơn hàng: ' + err.message))
+      .finally(() => { if (alive) setMyOrdersLoading(false); });
+
+    const unsubscribe = subscribeToMyOrderUpdates(customer.id, (updated) => {
+      setMyOrders(prev => prev.map(o => o.id === updated.id ? { ...o, status: updated.status } : o));
+      showToast(`Đơn #${updated.id} vừa được cập nhật trạng thái.`);
+    });
+
+    return () => { alive = false; unsubscribe(); };
+  }, [showMyOrders, customer]);
 
   /* ---------------- Product CRUD (admin) ---------------- */
   async function upsertProduct(data) {
@@ -275,6 +304,10 @@ export default function App() {
         customer={customer}
         onLoginClick={() => setLoginOpen(true)}
         onLogoutClick={handleCustomerLogout}
+        onMyOrdersClick={() => {
+          if (!customer) { setLoginOpen(true); return; }
+          window.location.hash = '#/orders';
+        }}
         cartCount={cartCount}
         cartPulse={cartPulse}
         onCartClick={() => setCartOpen(true)}
@@ -284,7 +317,13 @@ export default function App() {
         setSearchQuery={setSearchQuery}
       />
 
-      {productDetailId && products.find(p => String(p.id) === productDetailId) ? (
+      {showMyOrders ? (
+        <MyOrdersPage
+          orders={myOrders}
+          loading={myOrdersLoading}
+          onBack={() => window.history.back()}
+        />
+      ) : productDetailId && products.find(p => String(p.id) === productDetailId) ? (
         <ProductDetailPage
           product={products.find(p => String(p.id) === productDetailId)}
           addToCart={addToCart}
