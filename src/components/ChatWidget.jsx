@@ -1,21 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { fetchMyOrders } from '../lib/ordersApi.js';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export default function ChatWidget() {
+const STATUS_LABEL_VI = {
+  placed: 'Chờ xử lý',
+  shipped: 'Đang giao',
+  completed: 'Hoàn tất',
+  cancelled: 'Đã huỷ',
+};
+
+export default function ChatWidget({ customer }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Chào bạn! Mình là trợ lý Digi house, có gì mình giúp được không? 📷' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [myOrdersContext, setMyOrdersContext] = useState('');
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, open]);
+
+  // Khi khách đã đăng nhập, tự lấy đơn hàng của họ để AI có thể trả lời
+  // câu hỏi về trạng thái đơn — chỉ đơn của chính người đang chat.
+  useEffect(() => {
+    if (!customer) { setMyOrdersContext(''); return; }
+    fetchMyOrders()
+      .then(orders => {
+        if (!orders || orders.length === 0) {
+          setMyOrdersContext(`Khách đang chat tên "${customer.name}" hiện chưa có đơn hàng nào.`);
+          return;
+        }
+        const summary = orders.slice(0, 8).map(o => {
+          const itemsText = o.items.map(it => `${it.name} x${it.qty}`).join(', ');
+          const time = new Date(o.created_at).toLocaleString('vi-VN');
+          return `- Đơn #${o.id}: ${itemsText} | Tổng: ${o.total.toLocaleString('vi-VN')}đ | Trạng thái: ${STATUS_LABEL_VI[o.status] || o.status} | Đặt lúc: ${time}`;
+        }).join('\n');
+        setMyOrdersContext(`Danh sách đơn hàng thật của khách đang chat (tên "${customer.name}"):\n${summary}`);
+      })
+      .catch(() => setMyOrdersContext(''));
+  }, [customer]);
 
   async function sendMessage(e) {
     e.preventDefault();
@@ -36,6 +65,7 @@ export default function ChatWidget() {
         },
         body: JSON.stringify({
           messages: newMessages.map(m => ({ role: m.role, content: m.content })),
+          customerOrders: myOrdersContext,
         }),
       });
       const data = await res.json();
@@ -72,7 +102,7 @@ export default function ChatWidget() {
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder="Nhập câu hỏi..."
+              placeholder={customer ? 'Nhập câu hỏi (VD: đơn của tôi đến đâu rồi?)' : 'Nhập câu hỏi...'}
               disabled={loading}
             />
             <button type="submit" disabled={loading}><Send size={16} /></button>
