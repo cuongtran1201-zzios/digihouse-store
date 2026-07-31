@@ -359,7 +359,7 @@ export default function App() {
       
       <Toast message={toast} />
       <ScrollToTop />
-      <ChatWidget />
+      <ChatWidget customer={customer} />
     </div>
   );
 }
