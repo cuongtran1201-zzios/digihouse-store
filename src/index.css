@@ -260,10 +260,19 @@
       .dh-spec-chip { font-size: 10.5px; background: #F1F2F5; color: var(--muted); padding: 3px 7px; border-radius: 5px; }
       .dh-add-btn { width: 100%; margin-top: auto; padding: 9px; font-size: 13px; }
 
-      /* ---- Promo banners ---- */
-      .dh-promos { max-width: 1280px; margin: 0 auto; padding: 0 24px 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-      .dh-promo-card { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #fff; }
-      .dh-promo-red { background: var(--red); } .dh-promo-dark { background: var(--ink); } .dh-promo-blue { background: #1E5FBF; }
+      /* ---- Promo banners (3D scroll) ---- */
+      .dh-promos2 { max-width: 1280px; margin: 0 auto; padding: 12px 24px 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; perspective: 1000px; }
+      .dh-promo2-card {
+      display: flex; align-items: center; gap: 14px; padding: 20px 20px; border-radius: 14px;
+      color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform .05s linear, opacity .05s linear;
+      will-change: transform, opacity;
+      }
+      .dh-promo2-title { font-size: 14.5px; font-weight: 700; margin: 0; }
+      .dh-promo2-desc { font-size: 12px; margin: 2px 0 0; opacity: 0.85; }
+      @media (max-width: 760px) {
+      .dh-promos2 { grid-template-columns: 1fr; }
+      }
 
       /* ---- Cart drawer ---- */
       .dh-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 30; animation: dhOverlayIn .2s ease; }
@@ -489,7 +498,7 @@
 
       /* ---- Respect reduced motion ---- */
       @media (prefers-reduced-motion: reduce) {
-        .dh-reveal, .dh-hero-in, .dh-cart-icon-wrap, .dh-flame-flicker, .dh-badge-discount, .dh-cart-badge, .dh-orb, .dh-ring3d, .dh-order-check, .dh-overlay, .dh-why-card {
+        .dh-reveal, .dh-hero-in, .dh-cart-icon-wrap, .dh-flame-flicker, .dh-badge-discount, .dh-cart-badge, .dh-orb, .dh-ring3d, .dh-order-check, .dh-overlay, .dh-why-card, .dh-promo2-card {
           animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important;
         }
         .dh-login-modal, .dh-login-modal.dh-shake, .dh-admin-login-card, .dh-admin-login-card.dh-shake, .dh-admin-login-badge {
