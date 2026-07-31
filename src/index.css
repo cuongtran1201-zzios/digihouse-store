@@ -206,15 +206,26 @@
       .dh-cart-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
 
       /* ---- Vì sao chọn Digi house (3D scroll storytelling) ---- */
-.dh-why { max-width: 1280px; margin: 0 auto; padding: 40px 24px 8px; perspective: 1000px; }
-.dh-why-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; text-align: center; margin: 0 0 28px; letter-spacing: -0.01em; }
-.dh-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.dh-why-card { border-radius: 16px; padding: 28px 20px; text-align: center; transition: transform .05s linear, opacity .05s linear; will-change: transform, opacity; }
-.dh-why-card-title { font-weight: 700; font-size: 15px; margin: 12px 0 4px; }
-.dh-why-card-desc { font-size: 12.5px; margin: 0; opacity: 0.85; }
-@media (max-width: 760px) {
-  .dh-why-grid { grid-template-columns: 1fr; }
-}
+      .dh-why { max-width: 1280px; margin: 0 auto; padding: 40px 24px 8px; perspective: 1000px; }
+      .dh-why-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; text-align: center; margin: 0 0 28px; letter-spacing: -0.01em; }
+      .dh-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .dh-why-card {
+        background: var(--ink); border: 1px solid #232830; border-radius: 16px;
+        padding: 32px 24px; text-align: center;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+        transition: transform .05s linear, opacity .05s linear, box-shadow .2s ease;
+        will-change: transform, opacity;
+      }
+      .dh-why-card:hover { box-shadow: 0 16px 34px rgba(0,0,0,0.35); }
+      .dh-why-icon {
+        width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 16px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .dh-why-card-title { font-weight: 700; font-size: 15.5px; margin: 0 0 6px; color: #fff; }
+      .dh-why-card-desc { font-size: 12.5px; margin: 0; color: #8A93A1; }
+      @media (max-width: 760px) {
+        .dh-why-grid { grid-template-columns: 1fr; }
+      }
 
       /* ---- Category icon row ---- */
       .dh-catrow { max-width: 1280px; margin: 20px auto 0; padding: 18px 24px; display: flex; gap: 14px; overflow-x: auto; }
@@ -264,15 +275,15 @@
       /* ---- Promo banners (3D scroll) ---- */
       .dh-promos2 { max-width: 1280px; margin: 0 auto; padding: 12px 24px 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; perspective: 1000px; }
       .dh-promo2-card {
-      display: flex; align-items: center; gap: 14px; padding: 20px 20px; border-radius: 14px;
-      color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      transition: transform .05s linear, opacity .05s linear;
-      will-change: transform, opacity;
+        display: flex; align-items: center; gap: 14px; padding: 20px 20px; border-radius: 14px;
+        color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transition: transform .05s linear, opacity .05s linear;
+        will-change: transform, opacity;
       }
       .dh-promo2-title { font-size: 14.5px; font-weight: 700; margin: 0; }
       .dh-promo2-desc { font-size: 12px; margin: 2px 0 0; opacity: 0.85; }
       @media (max-width: 760px) {
-      .dh-promos2 { grid-template-columns: 1fr; }
+        .dh-promos2 { grid-template-columns: 1fr; }
       }
 
       /* ---- Cart drawer ---- */
@@ -310,6 +321,8 @@
       .dh-tab { background: transparent; border: none; color: var(--muted); padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; transition: background .25s var(--spring-soft), color .2s ease; }
       .dh-tab.active { background: var(--red); color: #fff; }
       .dh-tab-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; margin-left: 6px; background: #E0393B; color: #fff; font-size: 10.5px; font-weight: 700; border-radius: 999px; }
+
+      /* ---- Orders table ---- */
       .dh-order-customer { display: flex; flex-direction: column; gap: 2px; }
       .dh-order-email { font-size: 11px; color: var(--muted); }
       .dh-status-wrap { position: relative; display: inline-block; }
@@ -355,37 +368,37 @@
       /* ---- Account button / admin footer link ---- */
       .dh-account-btn { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--line); color: var(--ink); padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
       .dh-account-wrap { position: relative; }
-.dh-account-menu {
-  position: absolute; top: calc(100% + 8px); right: 0; z-index: 40;
-  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 6px;
-  box-shadow: 0 14px 32px rgba(0,0,0,0.14); min-width: 190px;
-  animation: dhCardPopIn .18s var(--spring-soft) both;
-}
-.dh-account-menu button {
-  width: 100%; display: flex; align-items: center; gap: 9px; text-align: left;
-  background: transparent; border: none; padding: 10px 12px; border-radius: 8px;
-  font-size: 13.5px; color: var(--ink);
-}
-.dh-account-menu button:hover { background: var(--bg); }
+      .dh-account-menu {
+        position: absolute; top: calc(100% + 8px); right: 0; z-index: 40;
+        background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 6px;
+        box-shadow: 0 14px 32px rgba(0,0,0,0.14); min-width: 190px;
+        animation: dhCardPopIn .18s var(--spring-soft) both;
+      }
+      .dh-account-menu button {
+        width: 100%; display: flex; align-items: center; gap: 9px; text-align: left;
+        background: transparent; border: none; padding: 10px 12px; border-radius: 8px;
+        font-size: 13.5px; color: var(--ink);
+      }
+      .dh-account-menu button:hover { background: var(--bg); }
 
-/* ---- Order status timeline (Đơn hàng của tôi) ---- */
-.dh-myorders { max-width: 780px; }
-.dh-myorders-title { font-size: 24px; font-weight: 800; margin: 0 0 22px; }
-.dh-myorders-loading { color: var(--muted); }
-.dh-myorders-list { display: flex; flex-direction: column; gap: 18px; }
-.dh-myorders-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
-.dh-myorders-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.dh-myorders-items { margin: 16px 0; display: flex; flex-direction: column; gap: 6px; }
-.dh-myorders-item { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); }
+      /* ---- Order status timeline (Đơn hàng của tôi) ---- */
+      .dh-myorders { max-width: 780px; }
+      .dh-myorders-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; margin: 0 0 22px; letter-spacing: -0.01em; }
+      .dh-myorders-loading { color: var(--muted); }
+      .dh-myorders-list { display: flex; flex-direction: column; gap: 18px; }
+      .dh-myorders-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+      .dh-myorders-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+      .dh-myorders-items { margin: 16px 0; display: flex; flex-direction: column; gap: 6px; }
+      .dh-myorders-item { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); }
 
-.dh-order-timeline { display: flex; align-items: center; }
-.dh-order-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
-.dh-order-step-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); transition: background .2s ease; }
-.dh-order-step.done .dh-order-step-dot { background: var(--red); }
-.dh-order-step-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
-.dh-order-step.done .dh-order-step-label { color: var(--ink); font-weight: 600; }
-.dh-order-step-line { flex: 1; height: 2px; background: var(--line); margin: 0 6px 18px; transition: background .2s ease; }
-.dh-order-step-line.done { background: var(--red); }
+      .dh-order-timeline { display: flex; align-items: center; }
+      .dh-order-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+      .dh-order-step-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); transition: background .2s ease; }
+      .dh-order-step.done .dh-order-step-dot { background: var(--red); }
+      .dh-order-step-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+      .dh-order-step.done .dh-order-step-label { color: var(--ink); font-weight: 600; }
+      .dh-order-step-line { flex: 1; height: 2px; background: var(--line); margin: 0 6px 18px; transition: background .2s ease; }
+      .dh-order-step-line.done { background: var(--red); }
       .dh-account-btn:hover { border-color: var(--red); color: var(--red); }
       .dh-admin-link { background: none; border: none; color: #6B7280; font-size: 11px; text-decoration: underline; margin-left: 10px; cursor: pointer; }
       .dh-admin-link:hover { color: #fff; }
@@ -499,6 +512,7 @@
 
       /* ---- Respect reduced motion ---- */
       @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
         .dh-reveal, .dh-hero-in, .dh-cart-icon-wrap, .dh-flame-flicker, .dh-badge-discount, .dh-cart-badge, .dh-orb, .dh-ring3d, .dh-order-check, .dh-overlay, .dh-why-card, .dh-promo2-card {
           animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important;
         }
@@ -506,6 +520,142 @@
           animation: none !important;
         }
         .dh-card, .dh-thumb img, .dh-logo, .dh-btn-primary, .dh-hero2, .dh-pill-cta, .dh-mini-card { transition: none !important; }
+      }
+
+      /* ---- Scroll to top ---- */
+      /* ---- Custom cursor ---- */
+      body.dh-cursor-none, body.dh-cursor-none * { cursor: none !important; }
+      .dh-cursor-dot {
+        position: fixed; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
+        background: var(--red); pointer-events: none; z-index: 9999; will-change: transform;
+      }
+      .dh-cursor-ring {
+        position: fixed; top: 0; left: 0; width: 34px; height: 34px; border-radius: 50%;
+        border: 1.5px solid var(--red); pointer-events: none; z-index: 9998; will-change: transform;
+        transition: width .2s var(--spring-soft), height .2s var(--spring-soft), background .2s ease;
+      }
+      .dh-cursor-ring.dh-cursor-hover {
+        width: 56px; height: 56px; background: rgba(27,76,135,0.08);
+      }
+
+      .dh-scrolltop {
+        position: fixed; bottom: 28px; right: 28px; z-index: 60;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: var(--red); color: #fff; border: none;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+        animation: dhPopIn .3s var(--spring) both;
+        transition: transform .2s var(--spring), background .15s ease;
+      }
+      .dh-scrolltop:hover { transform: translateY(-3px); background: var(--red-dark); }
+
+      /* ---- Chat widget ---- */
+      .dh-chat-fab {
+        position: fixed; bottom: 28px; left: 28px; z-index: 60;
+        width: 52px; height: 52px; border-radius: 50%;
+        background: var(--red); color: #fff; border: none;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+        animation: dhPopIn .3s var(--spring) both;
+        transition: transform .2s var(--spring), background .15s ease;
+      }
+      .dh-chat-fab:hover { transform: translateY(-3px); background: var(--red-dark); }
+      .dh-chat-panel {
+        position: fixed; bottom: 90px; left: 28px; z-index: 60;
+        width: 340px; max-width: 88vw; height: 460px; max-height: 70vh;
+        background: #fff; border-radius: 16px; overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        display: flex; flex-direction: column;
+        animation: dhCardPopIn .3s var(--spring) both;
+      }
+      .dh-chat-head { background: var(--red); color: #fff; padding: 14px 16px; font-weight: 700; font-size: 14px; }
+      .dh-chat-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+      .dh-chat-msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
+      .dh-chat-user { align-self: flex-end; background: var(--red); color: #fff; border-bottom-right-radius: 4px; }
+      .dh-chat-assistant { align-self: flex-start; background: var(--bg); color: var(--ink); border-bottom-left-radius: 4px; white-space: pre-wrap; }
+      .dh-chat-typing { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+      .dh-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+      .dh-chat-input input { flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 13px; }
+      .dh-chat-input input:focus { outline: none; border-color: var(--red); }
+      .dh-chat-input button { background: var(--red); color: #fff; border: none; width: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+      /* ---- Gallery upload grid (admin form) ---- */
+      .dh-gallery-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+      .dh-gallery-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+      .dh-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+      .dh-gallery-thumb button {
+        position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%;
+        background: rgba(0,0,0,0.6); color: #fff; border: none; display: flex; align-items: center; justify-content: center;
+      }
+      .dh-gallery-add {
+        width: 64px; height: 64px; border-radius: 8px; border: 1.5px dashed var(--line);
+        background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center;
+      }
+      .dh-gallery-add:hover { border-color: var(--red); color: var(--red); }
+
+      /* ---- Product detail page ---- */
+      .dh-detail { max-width: 1100px; margin: 0 auto; width: 100%; padding: 24px 24px 60px; scroll-margin-top: 96px; }
+      .dh-detail-back {
+        display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--line);
+        padding: 8px 14px; border-radius: 999px; font-size: 13px; color: var(--ink); margin-bottom: 20px;
+      }
+      .dh-detail-back:hover { border-color: var(--muted); }
+      .dh-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+      .dh-detail-main-image {
+        position: relative; background: #F7F8FA; border-radius: 16px; overflow: hidden;
+        aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+      }
+      .dh-detail-main-image img { width: 100%; height: 100%; object-fit: cover; }
+      .dh-detail-slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+      .dh-detail-slide-next { animation: dhSlideInRight .35s var(--spring-soft) both; }
+      .dh-detail-slide-prev { animation: dhSlideInLeft .35s var(--spring-soft) both; }
+      @keyframes dhSlideInRight { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+      @keyframes dhSlideInLeft { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+      .dh-detail-nav {
+        position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+        width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.92);
+        border: 1px solid var(--line); color: var(--ink); display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15); transition: transform .18s var(--spring), background .15s ease;
+      }
+      .dh-detail-nav:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+      .dh-detail-nav-prev { left: 12px; }
+      .dh-detail-nav-next { right: 12px; }
+      .dh-detail-dots { position: absolute; bottom: 12px; left: 0; right: 0; z-index: 5; display: flex; justify-content: center; gap: 6px; }
+      .dh-detail-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.6); box-shadow: 0 0 0 1px rgba(0,0,0,0.1); transition: width .2s var(--spring), background .2s ease; }
+      .dh-detail-dot.active { width: 18px; background: #fff; }
+      .dh-detail-noimg { color: var(--muted); font-size: 13px; }
+      .dh-detail-badge { top: 14px; left: 14px; font-size: 13px; padding: 5px 11px; }
+      .dh-detail-thumbs { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+      .dh-detail-thumb {
+        width: 64px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent;
+        background: #F7F8FA; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px;
+      }
+      .dh-detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+      .dh-detail-thumb.active { border-color: var(--red); }
+      .dh-detail-thumb-video { background: var(--ink); color: #fff; }
+      .dh-detail-info { display: flex; flex-direction: column; }
+      .dh-detail-info h1 { font-family: var(--font-display); font-size: 26px; font-weight: 800; margin: 4px 0 10px; letter-spacing: -0.01em; }
+      .dh-detail-price-row { margin: 14px 0; }
+      .dh-detail-price-row .dh-price-now { font-size: 26px; }
+      .dh-detail-specs { width: 100%; border-collapse: collapse; margin: 10px 0 18px; }
+      .dh-detail-specs td { padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+      .dh-detail-specs td:first-child { color: var(--muted); width: 40%; }
+      .dh-detail-specs td:last-child { font-weight: 600; }
+      .dh-detail-desc { color: var(--ink); font-size: 14px; line-height: 1.7; margin: 0 0 24px; }
+      .dh-detail-add { align-self: flex-start; padding: 13px 30px; font-size: 15px; }
+      .dh-detail-video-section { margin-top: 50px; }
+      .dh-detail-video-section h2 { font-size: 19px; font-weight: 700; margin: 0 0 16px; }
+      .dh-detail-video-wrap { position: relative; width: 100%; padding-top: 56.25%; border-radius: 14px; overflow: hidden; background: #000; }
+      .dh-detail-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+      .dh-detail-video-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+
+      /* ---- Video upload (admin form) ---- */
+      .dh-video-dropzone { height: 120px; }
+      .dh-video-preview { display: flex; flex-direction: column; gap: 8px; }
+      .dh-video-preview video { width: 100%; max-height: 220px; border-radius: 10px; background: #000; }
+
+      @media (max-width: 760px) {
+        .dh-detail-grid { grid-template-columns: 1fr; gap: 24px; }
       }
 
       /* ---- Responsive ---- */
@@ -522,198 +672,3 @@
         .dh-field-row, .dh-field-row-3 { flex-direction: column; }
         .dh-table th:nth-child(5), .dh-table td:nth-child(5) { display: none; }
       }
-
-      .dh-orb {
-  position: absolute; z-index: 2; border-radius: 50%; pointer-events: none;
-  box-shadow: inset -6px -8px 14px rgba(0,0,0,0.3), inset 4px 5px 10px rgba(255,255,255,0.35), 0 10px 22px rgba(0,0,0,0.3);
-  animation: dhOrbFloat 7s ease-in-out infinite;
-}
-@keyframes dhOrbFloat {
-  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-  50% { transform: translateY(-14px) translateX(6px) rotate(8deg); }
-}
-.dh-dotgrid-light {
-  position: absolute;
-  width: 64px; height: 46px;
-  background-image: radial-gradient(circle, rgba(43,169,225,0.35) 1.4px, transparent 1.6px);
-  background-size: 13px 13px; opacity: 0.55;
-}
-
-/* ---- Custom cursor ---- */
-body.dh-cursor-none, body.dh-cursor-none * { cursor: none !important; }
-.dh-cursor-dot {
-  position: fixed; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--red); pointer-events: none; z-index: 9999; will-change: transform;
-}
-.dh-cursor-ring {
-  position: fixed; top: 0; left: 0; width: 34px; height: 34px; border-radius: 50%;
-  border: 1.5px solid var(--red); pointer-events: none; z-index: 9998; will-change: transform;
-  transition: width .2s var(--spring-soft), height .2s var(--spring-soft), background .2s ease;
-}
-.dh-cursor-ring.dh-cursor-hover {
-  width: 56px; height: 56px; background: rgba(27,76,135,0.08);
-}
-
-.dh-scrolltop {
-  position: fixed; bottom: 28px; right: 28px; z-index: 60;
-  width: 46px; height: 46px; border-radius: 50%;
-  background: var(--red); color: #fff; border: none;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.25);
-  animation: dhPopIn .3s var(--spring) both;
-  transition: transform .2s var(--spring), background .15s ease;
-}
-.dh-scrolltop:hover { transform: translateY(-3px); background: var(--red-dark); }
-
-@media (max-width: 640px) {
-  .dh-catrow {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    justify-content: center;
-    gap: 10px;
-    padding: 16px 16px;
-  }
-  .dh-catrow-item {
-    min-width: calc(33.333% - 8px);
-    flex-shrink: 1;
-  }
-  .dh-flash-scroll {
-    scroll-snap-type: x mandatory;
-    padding-right: 48px;
-  }
-  .dh-flash-scroll .dh-card-compact {
-    scroll-snap-align: start;
-    min-width: 80%;
-    flex-shrink: 0;
-  }
-  .dh-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dh-chat-fab {
-  position: fixed; bottom: 28px; left: 28px; z-index: 60;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--red); color: #fff; border: none;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.25);
-  animation: dhPopIn .3s var(--spring) both;
-  transition: transform .2s var(--spring), background .15s ease;
-}
-.dh-chat-fab:hover { transform: translateY(-3px); background: var(--red-dark); }
-
-.dh-chat-panel {
-  position: fixed; bottom: 90px; left: 28px; z-index: 60;
-  width: 340px; max-width: 88vw; height: 460px; max-height: 70vh;
-  background: #fff; border-radius: 16px; overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-  display: flex; flex-direction: column;
-  animation: dhCardPopIn .3s var(--spring) both;
-}
-.dh-chat-head {
-  background: var(--red); color: #fff; padding: 14px 16px;
-  font-weight: 700; font-size: 14px;
-}
-.dh-chat-body {
-  flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;
-}
-.dh-chat-msg {
-  max-width: 85%; padding: 9px 13px; border-radius: 14px; font-size: 13px; line-height: 1.5;
-}
-.dh-chat-user {
-  align-self: flex-end; background: var(--red); color: #fff; border-bottom-right-radius: 4px;
-}
-.dh-chat-assistant {
-  align-self: flex-start; background: var(--bg); color: var(--ink); border-bottom-left-radius: 4px;
-}
-.dh-chat-typing { display: flex; align-items: center; gap: 6px; color: var(--muted); }
-.dh-chat-input {
-  display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line);
-}
-.dh-chat-input input {
-  flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 13px;
-}
-.dh-chat-input input:focus { outline: none; border-color: var(--red); }
-.dh-chat-input button {
-  background: var(--red); color: #fff; border: none; width: 38px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* ---- Gallery upload grid (admin form) ---- */
-.dh-gallery-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
-.dh-gallery-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
-.dh-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.dh-gallery-thumb button {
-  position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%;
-  background: rgba(0,0,0,0.6); color: #fff; border: none; display: flex; align-items: center; justify-content: center;
-}
-.dh-gallery-add {
-  width: 64px; height: 64px; border-radius: 8px; border: 1.5px dashed var(--line);
-  background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center;
-}
-.dh-gallery-add:hover { border-color: var(--red); color: var(--red); }
-
-/* ---- Product detail page ---- */
-.dh-detail { max-width: 1100px; margin: 0 auto; width: 100%; padding: 24px 24px 60px; scroll-margin-top: 96px; }
-.dh-detail-back {
-  display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--line);
-  padding: 8px 14px; border-radius: 999px; font-size: 13px; color: var(--ink); margin-bottom: 20px;
-}
-.dh-detail-back:hover { border-color: var(--muted); }
-.dh-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-.dh-detail-main-image {
-  position: relative; background: #F7F8FA; border-radius: 16px; overflow: hidden;
-  aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
-}
-.dh-detail-main-image img { width: 100%; height: 100%; object-fit: cover; }
-.dh-detail-slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.dh-detail-slide-next { animation: dhSlideInRight .35s var(--spring-soft) both; }
-.dh-detail-slide-prev { animation: dhSlideInLeft .35s var(--spring-soft) both; }
-@keyframes dhSlideInRight { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes dhSlideInLeft { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
-.dh-detail-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
-  width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.92);
-  border: 1px solid var(--line); color: var(--ink); display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15); transition: transform .18s var(--spring), background .15s ease;
-}
-.dh-detail-nav:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
-.dh-detail-nav-prev { left: 12px; }
-.dh-detail-nav-next { right: 12px; }
-.dh-detail-dots { position: absolute; bottom: 12px; left: 0; right: 0; z-index: 5; display: flex; justify-content: center; gap: 6px; }
-.dh-detail-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.6); box-shadow: 0 0 0 1px rgba(0,0,0,0.1); transition: width .2s var(--spring), background .2s ease; }
-.dh-detail-dot.active { width: 18px; background: #fff; }
-.dh-detail-noimg { color: var(--muted); font-size: 13px; }
-.dh-detail-badge { top: 14px; left: 14px; font-size: 13px; padding: 5px 11px; }
-.dh-detail-thumbs { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-.dh-detail-thumb {
-  width: 64px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent;
-  background: #F7F8FA; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px;
-}
-.dh-detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.dh-detail-thumb.active { border-color: var(--red); }
-.dh-detail-thumb-video { background: var(--ink); color: #fff; }
-.dh-detail-info { display: flex; flex-direction: column; }
-.dh-detail-info h1 { font-size: 26px; font-weight: 800; margin: 4px 0 10px; }
-.dh-detail-price-row { margin: 14px 0; }
-.dh-detail-price-row .dh-price-now { font-size: 26px; }
-.dh-detail-specs { width: 100%; border-collapse: collapse; margin: 10px 0 18px; }
-.dh-detail-specs td { padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
-.dh-detail-specs td:first-child { color: var(--muted); width: 40%; }
-.dh-detail-specs td:last-child { font-weight: 600; }
-.dh-detail-desc { color: var(--ink); font-size: 14px; line-height: 1.7; margin: 0 0 24px; }
-.dh-detail-add { align-self: flex-start; padding: 13px 30px; font-size: 15px; }
-.dh-detail-video-section { margin-top: 50px; }
-.dh-detail-video-section h2 { font-size: 19px; font-weight: 700; margin: 0 0 16px; }
-.dh-detail-video-wrap { position: relative; width: 100%; padding-top: 56.25%; border-radius: 14px; overflow: hidden; background: #000; }
-.dh-detail-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-.dh-detail-video-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
-
-/* ---- Video upload (admin form) ---- */
-.dh-video-dropzone { height: 120px; }
-.dh-video-preview { display: flex; flex-direction: column; gap: 8px; }
-.dh-video-preview video { width: 100%; max-height: 220px; border-radius: 10px; background: #000; }
-
-@media (max-width: 760px) {
-  .dh-detail-grid { grid-template-columns: 1fr; gap: 24px; }
-}
