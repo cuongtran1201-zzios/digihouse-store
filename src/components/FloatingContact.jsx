@@ -4,13 +4,6 @@ import { CONTACT_INFO } from '../data/contactConfig.js';
 
 const CHANNELS = [
   {
-    key: 'phone',
-    label: `Gọi: ${CONTACT_INFO.phone}`,
-    icon: Phone,
-    href: `tel:${CONTACT_INFO.phone}`,
-    color: '#1B4C87',
-  },
-  {
     key: 'messenger',
     label: 'Nhắn Messenger',
     icon: Facebook,
