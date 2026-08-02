@@ -13,7 +13,6 @@ import ProductDetailPage from './views/ProductDetailPage.jsx';
 import MyOrdersPage from './views/MyOrdersPage.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import ChatWidget from './components/ChatWidget.jsx';
-import CustomCursor from './components/CustomCursor.jsx';
 
 import { supabase } from './lib/supabaseClient.js';
 import { getProfile, signOut, createOrder } from './lib/auth.js';
@@ -76,6 +75,7 @@ export default function App() {
   }, [cart]);
   const [cartOpen, setCartOpen] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [lastOrder, setLastOrder] = useState(null);
   const [placingOrder, setPlacingOrder] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -166,12 +166,13 @@ export default function App() {
     }
     setPlacingOrder(true);
     try {
-      await createOrder({
+      const created = await createOrder({
         customerId: customer.id,
         items: cartItems.map(({ product, qty }) => ({ id: product.id, name: product.name, price: product.price, qty })),
         total: cartTotal,
         paymentMethod,
       });
+      setLastOrder(created);
       setOrderPlaced(true);
       setCart([]);
     } catch (err) {
@@ -379,6 +380,7 @@ export default function App() {
           cartItems={cartItems}
           cartTotal={cartTotal}
           orderPlaced={orderPlaced}
+          lastOrder={lastOrder}
           placing={placingOrder}
           onClose={() => setCartOpen(false)}
           onChangeQty={changeQty}
@@ -391,7 +393,6 @@ export default function App() {
       <Toast message={toast} />
       <ScrollToTop />
       <ChatWidget customer={customer} />
-      <CustomCursor />
     </div>
   );
 }
