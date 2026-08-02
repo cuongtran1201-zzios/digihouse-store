@@ -44,7 +44,7 @@ export default function WhyChooseUs() {
       <h2 className="dh-why-title">
         <span className="dh-why-title-pre">Vì sao chọn </span>
         <span className="dh-why-title-digi">Digi</span>
-        <span className="dh-why-title-house">house</span>
+        <span className="dh-why-title-house"> house</span>
       </h2>
       <div className="dh-why-grid">
         {ITEMS.map((item, i) => {
@@ -56,7 +56,7 @@ export default function WhyChooseUs() {
               className="dh-why-card"
             >
               <div className="dh-why-icon" style={{ background: `${item.accent}26`, color: item.accent }}>
-                <Icon size={24} strokeWidth={1.8} />
+                <Icon size={i === 0 ? 30 : 24} strokeWidth={1.8} />
               </div>
               <p className="dh-why-card-title">{item.title}</p>
               <p className="dh-why-card-desc">{item.desc}</p>
