@@ -587,6 +587,29 @@
         width: 56px; height: 56px; background: rgba(27,76,135,0.08);
       }
 
+      /* ---- Floating quick contact (call / Messenger / Instagram / TikTok) ---- */
+      .dh-fcontact-wrap {
+        position: fixed; right: 28px; bottom: 90px; z-index: 59;
+        display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+      }
+      .dh-fcontact-fab {
+        width: 52px; height: 52px; border-radius: 50%;
+        background: var(--red); color: #fff; border: none;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+        transition: transform .2s var(--spring), background .15s ease;
+      }
+      .dh-fcontact-fab:hover { transform: translateY(-3px); background: var(--red-dark); }
+      .dh-fcontact-list { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+      .dh-fcontact-pill {
+        display: flex; align-items: center; gap: 8px; color: #fff; text-decoration: none;
+        padding: 10px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2); white-space: nowrap;
+        animation: dhFadeUp .25s var(--spring-soft) both;
+        transition: filter .15s ease, transform .15s var(--spring);
+      }
+      .dh-fcontact-pill:hover { filter: brightness(1.12); transform: translateY(-2px); }
+
       .dh-scrolltop {
         position: fixed; bottom: 28px; right: 28px; z-index: 60;
         width: 46px; height: 46px; border-radius: 50%;
