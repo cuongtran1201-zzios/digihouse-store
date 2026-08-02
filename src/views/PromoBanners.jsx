@@ -50,7 +50,7 @@ export default function PromoBanners() {
             className="dh-promo2-card"
             style={{ background: item.bg }}
           >
-            <Icon size={22} />
+            <Icon size={i === 0 ? 26 : 22} />
             <div>
               <p className="dh-promo2-title">{item.title}</p>
               <p className="dh-promo2-desc">{item.desc}</p>
