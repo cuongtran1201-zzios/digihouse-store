@@ -13,6 +13,7 @@ import ProductDetailPage from './views/ProductDetailPage.jsx';
 import MyOrdersPage from './views/MyOrdersPage.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import ChatWidget from './components/ChatWidget.jsx';
+import FloatingContact from './components/FloatingContact.jsx';
 
 import { supabase } from './lib/supabaseClient.js';
 import { getProfile, signOut, createOrder } from './lib/auth.js';
@@ -393,6 +394,7 @@ export default function App() {
       <Toast message={toast} />
       <ScrollToTop />
       <ChatWidget customer={customer} />
+      <FloatingContact />
     </div>
   );
 }
